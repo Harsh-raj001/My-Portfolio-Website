@@ -382,6 +382,8 @@ export default function PortfolioScene() {
           <GlobalIdleTracker />
           <MissionCompleteSequence onEnterExecMode={() => {
             setOperatingMode("TRANSITIONING_TO_EXEC");
+          }} onReExplore={() => {
+            setTeleportTarget(0);
           }} />
         </>
       )}

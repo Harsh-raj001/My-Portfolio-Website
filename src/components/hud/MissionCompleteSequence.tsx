@@ -9,14 +9,15 @@ import { audioEngine } from "../../lib/audioEngine";
 import ResourceLink from "../exec/ResourceLink";
 import { 
   Rocket, FileText, Code, User, Mail, Download, 
-  ChevronRight, Shield, Sparkles, Zap
+  ChevronRight, Shield, Sparkles, Zap, RotateCcw
 } from "lucide-react";
 
 interface MissionCompleteSequenceProps {
   onEnterExecMode: () => void;
+  onReExplore?: () => void;
 }
 
-export default function MissionCompleteSequence({ onEnterExecMode }: MissionCompleteSequenceProps) {
+export default function MissionCompleteSequence({ onEnterExecMode, onReExplore }: MissionCompleteSequenceProps) {
   const visitedNodes = useMissionStore(state => state.visitedNodes);
   const currentChapter = useMissionStore(state => state.currentChapter);
   const [isVisible, setIsVisible] = useState(false);
@@ -24,13 +25,16 @@ export default function MissionCompleteSequence({ onEnterExecMode }: MissionComp
 
   const completionPercentage = Math.min(100, Math.round((visitedNodes.length / TOTAL_INTERACTIVE_NODES) * 100));
 
-  // Trigger when user reaches the Dyson Sphere chapter
+  // Trigger when user reaches the Dyson Sphere chapter — delay 8s so FinaleContactDock is visible first
   useEffect(() => {
     if (currentChapter === "DYSON_SPHERE" && !isVisible) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsVisible(true);
-      setPhase("scanning");
-      audioEngine.playModalOpen();
+      const delayTimer = setTimeout(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsVisible(true);
+        setPhase("scanning");
+        audioEngine.playModalOpen();
+      }, 8000);
+      return () => clearTimeout(delayTimer);
     }
   }, [currentChapter, isVisible]);
 
@@ -216,15 +220,32 @@ export default function MissionCompleteSequence({ onEnterExecMode }: MissionComp
                   </ResourceLink>
                 </motion.div>
 
-                <motion.button
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
-                  onClick={() => setIsVisible(false)}
-                  className="text-xs font-mono text-slate-500 hover:text-slate-300 transition-colors tracking-widest uppercase mt-4"
+                  className="flex items-center justify-center gap-6 mt-4"
                 >
-                  [ Continue Exploring ]
-                </motion.button>
+                  {onReExplore && (
+                    <button
+                      onClick={() => {
+                        audioEngine.playHoverPing();
+                        setIsVisible(false);
+                        onReExplore();
+                      }}
+                      className="flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-cyan-300 transition-colors tracking-widest uppercase cursor-pointer"
+                    >
+                      <RotateCcw size={12} />
+                      Re-explore World
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setIsVisible(false)}
+                    className="text-xs font-mono text-slate-500 hover:text-slate-300 transition-colors tracking-widest uppercase cursor-pointer"
+                  >
+                    [ Dismiss ]
+                  </button>
+                </motion.div>
               </div>
             </motion.div>
           )}

@@ -249,8 +249,8 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
 
               return (
                 <div className="space-y-3">
-                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block text-center sm:text-left">Verified Evidence</span>
-                  <div className={`grid ${cards.length === 1 ? 'grid-cols-1 max-w-md mx-auto w-full' : 'grid-cols-1 sm:grid-cols-2'} gap-3`}>
+                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block text-center">Verified Evidence</span>
+                  <div className={`grid gap-3 ${cards.length === 1 ? 'grid-cols-1 max-w-xs mx-auto' : cards.length === 2 ? 'grid-cols-2 max-w-md mx-auto' : cards.length === 3 ? 'grid-cols-1 sm:grid-cols-3 max-w-xl mx-auto' : 'grid-cols-2 max-w-lg mx-auto'}`}>
                     {cards.map((card, idx) => (
                       <ResourceLink 
                         key={idx}
@@ -282,7 +282,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
               );
             })()}
 
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-center mt-4">
               <button 
                 onClick={() => {
                   audioEngine.playHoverPing();
