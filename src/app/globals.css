@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #f8fafc;
+  /* iOS Safari safe-area insets */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background: #050505;
+  color: #f8fafc;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  /* Use 100dvh for mobile address bar handling */
+  min-height: 100dvh;
+  overflow: hidden;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* Prevent pull-to-refresh on mobile */
+  overscroll-behavior: none;
+  /* Prevent accidental text selection on mobile */
+  -webkit-user-select: none;
+  user-select: none;
+  /* Prevent double-tap zoom */
+  touch-action: manipulation;
+}
+
+/* Allow text selection inside modals and exec mode */
+[role="dialog"],
+.exec-mode-content,
+.custom-scrollbar {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Hide scrollbars for cinematic immersion */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Law 8: Freeze and Blur 3D World During Modal Reading */
+body.modal-open canvas {
+  filter: blur(8px) brightness(0.4);
+  transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none !important;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Increase tap target sizes on mobile */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent iOS overscroll bounce */
+  html {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  body.modal-open canvas {
+    filter: brightness(0.4);
+    transition: none;
+  }
+}
+
+/* GPU-accelerated animations for smooth transforms */
+.gpu-accelerated {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
