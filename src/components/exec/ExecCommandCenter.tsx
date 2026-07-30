@@ -23,7 +23,6 @@ import {
   Award, Mail, BookOpen, User, Code, File, Phone, Globe, Eye
 } from "lucide-react";
 import MissionIntelligenceSearch from "./MissionIntelligenceSearch";
-import CustomCursor from "./CustomCursor";
 import CountUp from "./CountUp";
 import ScanReveal from "./ScanReveal";
 
@@ -144,7 +143,6 @@ export default function ExecCommandCenter({
 
   return (
     <>
-      <CustomCursor />
       <MissionIntelligenceSearch 
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
