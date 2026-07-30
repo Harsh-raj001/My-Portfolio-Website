@@ -34,3 +34,11 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## 🔒 Security & Secrets Warning
+
+> [!WARNING]
+> **Git History Rotation Warning**: If any API keys, credentials, or private credentials were previously hardcoded in the codebase during development, they remain accessible in the Git history. Immediately rotate any compromised tokens.
+> 
+> All credentials must be moved to environment variables and defined in `.env` (which is automatically ignored by `.gitignore`). Refer to `.env.example` for the required environment variable structure.
+

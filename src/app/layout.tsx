@@ -23,17 +23,32 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://harsh-raj001.github.io/My-Portfolio-Website"),
   title: "Harsh Raj | Product Manager Portfolio",
   description: "An unforgettable 3D cinematic storytelling experience representing the career journey of aspiring Product Manager Harsh Raj. Google Doodle charm, Pixar storytelling, NASA space exploration, Unreal Engine 5 lighting, and Apple minimalism.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Product Manager Portfolio",
+    title: "Harsh Raj | Product Manager Portfolio",
     description: "This person understands products, solves problems, and builds meaningful experiences.",
     type: "website",
+    url: "https://harsh-raj001.github.io/My-Portfolio-Website",
+    siteName: "Project Odyssey",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Harsh Raj | Product Manager Portfolio",
+    description: "An interactive 3D cinematic portfolio showcasing product management expertise.",
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Project Odyssey",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -47,7 +62,17 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
-      <body className="min-h-full flex flex-col bg-black text-white selection:bg-cyan-500 selection:text-black overflow-hidden">{children}</body>
+      <body className="min-h-full flex flex-col bg-black text-white selection:bg-cyan-500 selection:text-black overflow-hidden">
+        {/* Accessibility: Skip-to-content link for keyboard users */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-cyan-500 focus:text-black focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-bold"
+        >
+          Skip to main content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }
+

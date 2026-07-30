@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { FINALE_LINKS, EXPLORER_NAME } from "../../data/missionData";
 import { audioEngine } from "../../lib/audioEngine";
-import { FileText, User, Code } from "lucide-react";
+import { FileText, User, Code, Phone } from "lucide-react";
 
 interface CommandDashboardProps {
   progress: number; // 0.0 to 1.0
@@ -84,6 +84,7 @@ export default function CommandDashboard({ progress }: CommandDashboardProps) {
               href={FINALE_LINKS.resume} 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="View Resume"
               onClick={() => audioEngine.playHoverPing()}
               className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group"
             >
@@ -95,6 +96,7 @@ export default function CommandDashboard({ progress }: CommandDashboardProps) {
               href={FINALE_LINKS.linkedin} 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="View LinkedIn Profile"
               onClick={() => audioEngine.playHoverPing()}
               className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group"
             >
@@ -106,16 +108,30 @@ export default function CommandDashboard({ progress }: CommandDashboardProps) {
               href={FINALE_LINKS.github} 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="View GitHub Profile"
               onClick={() => audioEngine.playHoverPing()}
               className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group"
             >
               <Code className="text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-medium text-slate-300 group-hover:text-white">GitHub</span>
             </a>
+
+            {FINALE_LINKS.tel && (
+              <a 
+                href={FINALE_LINKS.tel}
+                aria-label="Call Phone Number"
+                onClick={() => audioEngine.playHoverPing()}
+                className="flex flex-col items-center justify-center p-4 border border-emerald-500/20 rounded-xl bg-slate-900/50 hover:bg-emerald-900/30 hover:border-emerald-400/50 transition-all group"
+              >
+                <Phone className="text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
+                <span className="text-xs font-medium text-slate-300 group-hover:text-white">Call</span>
+              </a>
+            )}
           </div>
 
           <a
             href={`mailto:${FINALE_LINKS.email}?subject=Initiating Contact // Mission Build`}
+            aria-label="Send Email"
             onClick={() => audioEngine.playHoverPing()}
             className="bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-mono font-bold text-xs uppercase tracking-widest px-6 py-2.5 rounded-full transition-all shadow-[0_0_20px_rgba(16,185,129,0.5)] cursor-pointer hover:scale-105 inline-flex items-center gap-2"
           >

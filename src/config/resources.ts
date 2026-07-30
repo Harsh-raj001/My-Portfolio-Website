@@ -10,11 +10,12 @@
 
 export const RESOURCES = {
   CONTACT: {
-    email: "hello@harshraj.com",
-    mailto: "mailto:hello@harshraj.com",
-    phone: "", // To be provided by candidate
+    email: "harshraj1936@gmail.com",
+    mailto: "mailto:harshraj1936@gmail.com",
+    phone: "7667759898",
+    tel: "tel:+917667759898",
   },
-  
+
   PROFILES: {
     portfolio: "https://gravel-citrine-12a.notion.site/Product-Management-Portfolio-Harsh-Raj-386142fbea2d8019af20d18aa7aa5ea6?source=copy_link",
     linkedin: "https://www.linkedin.com/in/harsh-raj-in/",
