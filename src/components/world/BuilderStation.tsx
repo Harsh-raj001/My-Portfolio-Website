@@ -9,6 +9,7 @@ import { PORTFOLIO_PROJECTS } from "../../data/missionData";
 import { PortfolioProject } from "../../types/mission";
 import { audioEngine } from "../../lib/audioEngine";
 import { triggerHaptic } from "../../lib/haptics";
+import { useMissionStore } from "../../store/missionStore";
 
 interface OrbitalCityNexusProps {
   onSelectLab?: (lab: PortfolioProject) => void;
@@ -29,8 +30,11 @@ function ProductLabModule({
 }) {
   const moduleRef = useRef<THREE.Group>(null);
   const viewportRef = useRef<THREE.Mesh>(null);
+  const pulseRingRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshPhysicalMaterial>(null);
   const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const setHoveringInteractive = useMissionStore(state => state.setHoveringInteractive);
   const targetScale = useMemo(() => new THREE.Vector3(1, 1, 1), []);
 
   useFrame((state, delta) => {
@@ -38,10 +42,17 @@ function ProductLabModule({
       // Gentle floating in orbital city docking bay
       moduleRef.current.position.y = lab.coordinates[1] + Math.sin(state.clock.elapsedTime * 2 + lab.coordinates[0]) * 0.3;
       
-      const scaleVal = hovered ? 1.25 : 1.0;
+      const scaleVal = clicked ? 1.6 : hovered ? 1.25 : 1.0;
       targetScale.set(scaleVal, scaleVal, scaleVal);
       easing.damp3(moduleRef.current.scale, targetScale, 0.15, delta);
     }
+    
+    if (pulseRingRef.current) {
+      const pulse = 1.0 + Math.sin(state.clock.elapsedTime * 3) * 0.3;
+      pulseRingRef.current.scale.set(pulse, pulse, pulse);
+      (pulseRingRef.current.material as THREE.MeshBasicMaterial).opacity = 0.3 + Math.sin(state.clock.elapsedTime * 3) * 0.2;
+    }
+
     if (materialRef.current) {
       const baseIntensity = hovered ? 3.0 : 1.0 + Math.sin(state.clock.elapsedTime * 4 + lab.coordinates[0]) * 0.5;
       easing.damp(materialRef.current, "emissiveIntensity", baseIntensity, 0.1, delta);
@@ -55,23 +66,34 @@ function ProductLabModule({
       onClick={(e) => {
         e.stopPropagation();
         triggerHaptic("light");
-        onSelect?.(lab);
+        audioEngine.playModalOpen();
+        setClicked(true);
+        setTimeout(() => {
+          onSelect?.(lab);
+          setClicked(false);
+        }, 250);
       }}
       onPointerOver={(e) => {
         e.stopPropagation();
         setHovered(true);
         audioEngine.playHoverPing();
-        document.body.style.cursor = "pointer";
+        setHoveringInteractive(true);
       }}
       onPointerOut={() => {
         setHovered(false);
-        document.body.style.cursor = "auto";
+        setHoveringInteractive(false);
       }}
     >
       {/* Invisible enlarged hitbox */}
       <mesh>
         <boxGeometry args={[8, 6, 6]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
+
+      {/* Persistent Cyan Pulse Affordance */}
+      <mesh ref={pulseRingRef} rotation-x={Math.PI / 2} position={[0, -2.5, 0]}>
+        <ringGeometry args={[3.2, 3.8, 32]} />
+        <meshBasicMaterial color="#00F0FF" transparent opacity={0.5} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
 
       {/* Module Exterior Hull (Industrial Cyberpunk Palette) */}
@@ -144,16 +166,13 @@ function ProductLabModule({
         />
       )}
 
-      {/* Hover Tooltip Label */}
-      {hovered && (
-        <Html position={[0, 3.5, 0]} center zIndexRange={[100, 0]} style={{ pointerEvents: "none" }}>
-          <div className="bg-slate-900/90 border border-emerald-400/50 backdrop-blur-md px-3 py-1.5 rounded-md flex flex-col items-center min-w-[140px] shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse-fast">
-            <span className="text-[9px] font-mono font-bold uppercase text-emerald-400 tracking-widest mb-0.5">Mission Objective</span>
-            <span className="text-xs font-semibold text-white whitespace-nowrap text-center">Inspect Module</span>
-            <span className="text-[10px] text-slate-300 mt-0.5">Click to Open</span>
-          </div>
-        </Html>
-      )}
+      {/* Floating Label (Fades in on hover) */}
+      <Html position={[0, 4.0, 0]} center zIndexRange={[100, 0]} style={{ pointerEvents: "none", opacity: hovered ? 1 : 0, transition: "opacity 0.2s" }}>
+        <div className="bg-slate-950/90 border border-cyan-500/50 backdrop-blur-md px-3 py-1.5 rounded-md flex flex-col items-center min-w-[140px] shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+          <span className="text-[10px] font-mono font-bold uppercase text-cyan-400 tracking-widest mb-0.5">◉ INSPECT</span>
+          <span className="text-xs font-semibold text-white whitespace-nowrap text-center">{lab.topic}</span>
+        </div>
+      </Html>
 
       {/* Default State Label */}
       {!hovered && isActiveObjective && (
@@ -169,8 +188,6 @@ function ProductLabModule({
     </group>
   );
 }
-
-import { useMissionStore } from "../../store/missionStore";
 
 export default function OrbitalCityNexus({ onSelectLab }: OrbitalCityNexusProps) {
   const stationCoreRef = useRef<THREE.Group>(null);

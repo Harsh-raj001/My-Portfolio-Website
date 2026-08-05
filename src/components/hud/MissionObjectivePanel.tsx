@@ -42,7 +42,7 @@ export default function MissionObjectivePanel() {
 
   return (
     <div 
-      className="fixed top-20 left-4 sm:top-24 sm:left-6 md:left-12 z-40 pointer-events-none max-w-[calc(100%-2rem)] w-64 sm:w-80"
+      className="fixed top-[108px] left-4 sm:top-24 sm:left-6 md:left-12 z-40 pointer-events-none max-w-[calc(100%-2rem)] w-64 sm:w-80"
       style={{
         paddingTop: "env(safe-area-inset-top, 0px)",
         paddingLeft: "env(safe-area-inset-left, 0px)",
@@ -75,18 +75,12 @@ export default function MissionObjectivePanel() {
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 to-transparent opacity-50" />
           
           <div className="relative z-10">
-            <h3 className="text-[10px] font-bold text-cyan-500 uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
-              <Target size={12} className={showWarning ? "text-amber-400" : ""} />
-              Mission Objective
-            </h3>
-            
-            <p className="text-sm font-semibold text-slate-100 mb-3 leading-snug">
-              {objectiveTitle}
-            </p>
-            
-            <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest">
-              <span className="text-slate-500">Status</span>
-              <span className={`px-2 py-0.5 rounded border ${
+            <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+              <h3 className="text-[9px] sm:text-[10px] font-bold text-cyan-500 uppercase tracking-[0.2em] flex items-center gap-1.5">
+                <Target size={10} className={showWarning ? "text-amber-400" : ""} />
+                Objective
+              </h3>
+              <span className={`px-1.5 py-0.5 rounded border text-[8px] sm:text-[9px] font-mono uppercase tracking-widest ${
                 showWarning 
                   ? "border-amber-900/50 text-amber-400 bg-amber-950/30" 
                   : "border-cyan-900/50 text-cyan-400 bg-cyan-950/30"
@@ -94,6 +88,10 @@ export default function MissionObjectivePanel() {
                 {objectiveStatus}
               </span>
             </div>
+            
+            <p className="text-xs sm:text-sm font-semibold text-slate-100 leading-snug">
+              {objectiveTitle}
+            </p>
           </div>
         </motion.div>
       </AnimatePresence>

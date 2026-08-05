@@ -23,6 +23,12 @@ export default function ExecBootSequence({ onComplete }: ExecBootSequenceProps) 
   useEffect(() => {
     // Play system boot sound
     audioEngine.playHoverPing();
+    
+    const handleSkip = () => {
+      audioEngine.playModalOpen(); // play a confirm sound
+      onComplete();
+    };
+    window.addEventListener("keydown", handleSkip);
 
     let currentIndex = 0;
     const interval = setInterval(() => {
@@ -36,15 +42,24 @@ export default function ExecBootSequence({ onComplete }: ExecBootSequenceProps) 
         clearInterval(interval);
         setTimeout(() => {
           onComplete();
-        }, 800); // Wait a bit after showing "EXEC MODE ONLINE"
+        }, 300); // Wait a bit after showing "EXEC MODE ONLINE"
       }
-    }, 400); // 400ms per line
+    }, 150); // 150ms per line
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("keydown", handleSkip);
+    };
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black cursor-pointer"
+      onClick={() => {
+        audioEngine.playModalOpen();
+        onComplete();
+      }}
+    >
       <div className="w-full max-w-2xl px-8">
         <div className="font-mono text-sm tracking-widest text-slate-400">
           <AnimatePresence>
@@ -71,6 +86,16 @@ export default function ExecBootSequence({ onComplete }: ExecBootSequenceProps) 
               className="inline-block w-2 h-4 bg-cyan-500 mt-2 ml-[3.5rem]"
             />
           )}
+          
+          {/* Skip Hint */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            transition={{ delay: 0.5 }}
+            className="absolute bottom-8 right-8 text-[10px] text-cyan-500 uppercase tracking-widest"
+          >
+            [Press any key or tap to skip]
+          </motion.div>
         </div>
       </div>
     </div>

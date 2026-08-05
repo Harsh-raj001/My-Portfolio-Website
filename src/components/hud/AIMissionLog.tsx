@@ -6,16 +6,15 @@ import { audioEngine } from "../../lib/audioEngine";
 import { useMissionStore } from "../../store/missionStore";
 
 interface AURAObserverProps {
-  progress: number; // 0.0 to 1.0
   operatingMode?: "MISSION" | "TRANSITIONING_TO_EXEC" | "EXEC" | "TRANSITIONING_TO_MISSION";
   searchQuery?: string;
 }
 
 export default function AURAObserver({ 
-  progress, 
   operatingMode = "MISSION",
   searchQuery = "" 
 }: AURAObserverProps) {
+  const progress = useMissionStore(state => state.progress);
   const [currentLog, setCurrentLog] = useState<AIMissionLogEntry>(AI_MISSION_LOG[0]);
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -109,7 +108,7 @@ export default function AURAObserver({
       aria-live="polite"
       aria-atomic="true"
       aria-label="A.U.R.A. Flight Computer Cockpit Monitor"
-      className="fixed bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto z-40 max-w-[calc(100%-2rem)] sm:max-w-[380px] w-full pointer-events-none select-none"
+      className="fixed bottom-4 left-4 right-20 sm:bottom-6 sm:left-6 sm:right-auto z-40 max-w-[calc(100%-5.5rem)] sm:max-w-[380px] w-full pointer-events-none select-none"
       style={{ 
         transform: "translate3d(0, 0, 0)", 
         willChange: "transform",

@@ -18,6 +18,13 @@ interface MissionState {
   visitedNodes: string[];
   
   // Computed Progression (Will be calculated based on total nodes later, or tracked via this array)
+  progress: number;
+  isScrolling: boolean;
+  hasScrolled: boolean;
+  hasOpenedScanner: boolean;
+  isHoveringInteractive: boolean;
+  isTeleporting: boolean;
+
   // Actions
   setCurrentChapter: (chapter: ChapterId) => void;
   setActiveObjectiveId: (id: string | null) => void;
@@ -25,6 +32,13 @@ interface MissionState {
   setIdle: (idle: boolean) => void;
   updateBreadcrumbs: (crumb: string) => void;
   markNodeVisited: (id: string) => void;
+  
+  setProgress: (progress: number) => void;
+  setScrolling: (scrolling: boolean) => void;
+  setHasScrolled: (scrolled: boolean) => void;
+  setHasOpenedScanner: (opened: boolean) => void;
+  setHoveringInteractive: (hovering: boolean) => void;
+  setIsTeleporting: (teleporting: boolean) => void;
 }
 
 export const useMissionStore = create<MissionState>((set) => ({
@@ -34,6 +48,15 @@ export const useMissionStore = create<MissionState>((set) => ({
   isIdle: false,
   breadcrumbs: ["Mission Control"],
   visitedNodes: [],
+  
+  progress: 0,
+  isScrolling: false,
+  hasScrolled: false,
+  hasOpenedScanner: false,
+  isHoveringInteractive: false,
+  isTeleporting: false,
+
+  setIsTeleporting: (teleporting) => set({ isTeleporting: teleporting }),
 
   setCurrentChapter: (chapter) => set({ currentChapter: chapter }),
   
@@ -55,5 +78,11 @@ export const useMissionStore = create<MissionState>((set) => ({
       return { visitedNodes: [...state.visitedNodes, id] };
     }
     return state;
-  })
+  }),
+
+  setProgress: (progress) => set({ progress }),
+  setScrolling: (isScrolling) => set({ isScrolling }),
+  setHasScrolled: (hasScrolled) => set({ hasScrolled }),
+  setHasOpenedScanner: (hasOpenedScanner) => set({ hasOpenedScanner }),
+  setHoveringInteractive: (isHoveringInteractive) => set({ isHoveringInteractive })
 }));

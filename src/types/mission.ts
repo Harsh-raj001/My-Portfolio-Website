@@ -45,10 +45,6 @@ export interface PortfolioProject extends UniversalNodeContent {
   type: "PRODUCT" | "CASE_STUDY";
   metrics?: string;
   deliverables?: string[];
-  githubUrl?: string;
-  liveDemoUrl?: string;
-  prdUrl?: string;
-  notionUrl?: string;
 }
 
 export type ExperienceNode = UniversalNodeContent;
@@ -127,13 +123,31 @@ export interface ProjectData {
   solution?: string;
   tech?: string;
   impact?: string;
-  github?: string;
-  live?: string;
-  prd?: string;
-  caseStudy?: string;
-  analytics?: string;
-  research?: string;
-  publication?: string;
+  
+  // Cinematic Narrative Fields (Used when merged with PortfolioProject)
+  type?: "PRODUCT" | "CASE_STUDY" | "RESEARCH";
+  topic?: string;
+  coordinates?: [number, number, number];
+  context?: string;
+  approach?: string;
+  decisions?: string;
+  outcome?: string;
+  evidenceType?: string;
+  evidenceUrl?: string;
+  metrics?: string;
+  
+  // Single Source of Truth for all external project resources
+  resources?: {
+    liveDemo?: string;
+    github?: string;
+    prd?: string;
+    caseStudy?: string;
+    documentation?: string;
+    demoVideo?: string;
+    analytics?: string;
+    research?: string;
+    publication?: string;
+  };
 }
 
 

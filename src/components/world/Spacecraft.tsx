@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { easing } from "maath";
 import { audioEngine } from "../../lib/audioEngine";
-import { qualitySettings } from "../../lib/qualityTier";
+import { qualitySettings, isMobile } from "../../lib/qualityTier";
 
 const MAX_THRUSTER_PARTICLES = 60;
 const STATIC_THRUSTER_PARTICLES = (() => {
@@ -172,8 +172,15 @@ export default function Spacecraft() {
     }
   });
 
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
+  useEffect(() => {
+    setIsMobileDevice(isMobile);
+  }, []);
+
+  const shipScale = isMobileDevice ? 0.65 : 1.0;
+
   return (
-    <group ref={groupRef} position={[0, 0, 0]}>
+    <group ref={groupRef} position={[0, 0, 0]} scale={shipScale}>
       {/* 🚀 PHASE 8: SPACECRAFT PLASMA THRUSTER EXHAUST TRAILS */}
       <ThrusterExhaustParticles velocityRef={velocity} />
 

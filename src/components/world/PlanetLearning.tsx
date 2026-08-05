@@ -8,6 +8,7 @@ import { easing } from "maath";
 import { PRODUCT_THINKING_NODES, ProductThinkingNode } from "../../data/missionData";
 import { audioEngine } from "../../lib/audioEngine";
 import { triggerHaptic } from "../../lib/haptics";
+import { useMissionStore } from "../../store/missionStore";
 
 interface PlanetSynthesisProps {
   onSelectNode?: (node: ProductThinkingNode) => void;
@@ -31,15 +32,18 @@ function KnowledgeMonolith({
   const groupRef = useRef<THREE.Group>(null);
   const crystalRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
+  const pulseRingRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshPhysicalMaterial>(null);
   const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const setHoveringInteractive = useMissionStore(state => state.setHoveringInteractive);
   const targetScale = useMemo(() => new THREE.Vector3(1, 1, 1), []);
 
   useFrame((state, delta) => {
     if (groupRef.current) {
       groupRef.current.position.y = node.coordinates[1] + Math.sin(state.clock.elapsedTime * 1.5 + node.coordinates[0]) * 0.5;
       
-      const scaleVal = hovered ? 1.4 : 1.0;
+      const scaleVal = clicked ? 2.0 : hovered ? 1.4 : 1.0;
       targetScale.set(scaleVal, scaleVal, scaleVal);
       easing.damp3(groupRef.current.scale, targetScale, 0.15, delta);
     }
@@ -48,6 +52,11 @@ function KnowledgeMonolith({
     }
     if (ringRef.current) {
       ringRef.current.rotation.z -= delta * 2.0;
+    }
+    if (pulseRingRef.current) {
+      const pulse = 1.0 + Math.sin(state.clock.elapsedTime * 3) * 0.3;
+      pulseRingRef.current.scale.set(pulse, pulse, pulse);
+      (pulseRingRef.current.material as THREE.MeshBasicMaterial).opacity = 0.3 + Math.sin(state.clock.elapsedTime * 3) * 0.2;
     }
     if (materialRef.current) {
       const baseIntensity = hovered ? 3.5 : 1.0 + Math.sin(state.clock.elapsedTime * 3 + index) * 0.4;
@@ -62,18 +71,23 @@ function KnowledgeMonolith({
       onClick={(e) => {
         e.stopPropagation();
         triggerHaptic("light");
-        onSelect?.(node);
+        audioEngine.playModalOpen();
+        setClicked(true);
+        setTimeout(() => {
+          onSelect?.(node);
+          setClicked(false);
+        }, 250);
       }}
       onPointerOver={(e) => {
         e.stopPropagation();
         setHovered(true);
         // Audio frequency modulation on hover
         audioEngine.playCrystallinePing(600 + index * 180);
-        document.body.style.cursor = "pointer";
+        setHoveringInteractive(true);
       }}
       onPointerOut={() => {
         setHovered(false);
-        document.body.style.cursor = "default";
+        setHoveringInteractive(false);
       }}
     >
       {/* Invisible enlarged hitbox */}
@@ -97,6 +111,12 @@ function KnowledgeMonolith({
           emissive={node.color || "#00F0FF"}
           emissiveIntensity={1.0}
         />
+      </mesh>
+
+      {/* Persistent Cyan Pulse Affordance */}
+      <mesh ref={pulseRingRef} rotation-x={Math.PI / 2} position={[0, -2, 0]}>
+        <ringGeometry args={[2.0, 2.5, 32]} />
+        <meshBasicMaterial color="#00F0FF" transparent opacity={0.5} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
 
       {/* Crystalline Wireframe Cage */}
@@ -143,13 +163,13 @@ function KnowledgeMonolith({
           <div className={`px-3 py-1.5 rounded-t border backdrop-blur-md text-sm font-mono whitespace-nowrap tracking-wider font-bold ${
             hovered 
               ? "bg-cyan-950/95 border-cyan-400 text-cyan-200 shadow-[0_0_20px_rgba(0,240,255,0.6)] scale-110" 
-              : "bg-slate-900/90 border-cyan-500/50 text-cyan-400"
+              : "bg-slate-900/90 border-cyan-500/50 text-cyan-400 bg-black/80"
           }`}>
             ▶ {node.topic}
           </div>
           {hovered && (
             <div className="bg-emerald-950/90 border border-t-0 border-emerald-500/50 px-3 py-1 rounded-b text-[10px] uppercase tracking-widest text-emerald-400 font-bold animate-pulse-fast">
-              Click to Inspect
+              ◉ INSPECT
             </div>
           )}
         </div>
@@ -157,8 +177,6 @@ function KnowledgeMonolith({
     </group>
   );
 }
-
-import { useMissionStore } from "../../store/missionStore";
 
 export default function PlanetSynthesis({ onSelectNode }: PlanetSynthesisProps) {
   const beltGroupRef = useRef<THREE.Group>(null);

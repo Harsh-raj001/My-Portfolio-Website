@@ -9,6 +9,7 @@ import { EXPERIENCE_NODES, ExperienceNode } from "../../data/missionData";
 import { audioEngine } from "../../lib/audioEngine";
 import { qualitySettings } from "../../lib/qualityTier";
 import { triggerHaptic } from "../../lib/haptics";
+import { useMissionStore } from "../../store/missionStore";
 
 const MAX_ASTEROID_DUST = 300;
 const STATIC_ASTEROID_DUST = (() => {
@@ -102,12 +103,15 @@ function AsteroidFieldNode({
   const groupRef = useRef<THREE.Group>(null);
   const rockRef = useRef<THREE.Mesh>(null);
   const holoRingRef = useRef<THREE.Mesh>(null);
+  const pulseRingRef = useRef<THREE.Mesh>(null);
   const outerGlowRef = useRef<THREE.Mesh>(null);
   const shieldMaterialRef = useRef<THREE.MeshBasicMaterial>(null);
   const pointLightRef = useRef<THREE.PointLight>(null);
+
   const [hovered, setHovered] = useState(false);
-  
-  // Track klaxon triggering to prevent sound spam
+  const [clicked, setClicked] = useState(false);
+  const setHoveringInteractive = useMissionStore(state => state.setHoveringInteractive);
+  const targetScale = useMemo(() => new THREE.Vector3(1, 1, 1), []);
   const klaxonTriggeredRef = useRef(false);
 
   // Pre-generate procedural rock geometry (zero runtime allocation)
@@ -115,8 +119,6 @@ function AsteroidFieldNode({
     const seed = expNode.coordinates[0] * 10 + expNode.coordinates[2];
     return createProceduralAsteroidGeometry(2.8, 2, seed);
   }, [expNode.coordinates]);
-
-  const targetScale = useMemo(() => new THREE.Vector3(1, 1, 1), []);
 
   useFrame((state, delta) => {
     if (rockRef.current) {
@@ -151,10 +153,16 @@ function AsteroidFieldNode({
       }
     }
 
-    const scaleVal = hovered ? 1.3 : 1.0;
+    const scaleVal = clicked ? 1.8 : hovered ? 1.3 : 1.0;
     targetScale.set(scaleVal, scaleVal, scaleVal);
     if (groupRef.current) {
       easing.damp3(groupRef.current.scale, targetScale, 0.15, delta);
+    }
+    
+    if (pulseRingRef.current) {
+      const pulse = 1.0 + Math.sin(state.clock.elapsedTime * 3) * 0.3;
+      pulseRingRef.current.scale.set(pulse, pulse, pulse);
+      (pulseRingRef.current.material as THREE.MeshBasicMaterial).opacity = 0.3 + Math.sin(state.clock.elapsedTime * 3) * 0.2;
     }
 
     // Animate energy shield opacity & point light intensity dynamically inside useFrame
@@ -179,23 +187,34 @@ function AsteroidFieldNode({
       onClick={(e) => {
         e.stopPropagation();
         triggerHaptic("light");
-        onSelect?.(expNode);
+        audioEngine.playModalOpen();
+        setClicked(true);
+        setTimeout(() => {
+          onSelect?.(expNode);
+          setClicked(false);
+        }, 250);
       }}
       onPointerOver={(e) => {
         e.stopPropagation();
         setHovered(true);
         audioEngine.playHoverPing();
-        document.body.style.cursor = "pointer";
+        setHoveringInteractive(true);
       }}
       onPointerOut={() => {
         setHovered(false);
-        document.body.style.cursor = "default";
+        setHoveringInteractive(false);
       }}
     >
       {/* Invisible enlarged hitbox */}
       <mesh>
         <sphereGeometry args={[6, 8, 8]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
+
+      {/* Persistent Cyan Pulse Affordance */}
+      <mesh ref={pulseRingRef}>
+        <ringGeometry args={[3.2, 3.6, 32]} />
+        <meshBasicMaterial color="#00F0FF" transparent opacity={0.5} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
 
       {/* Procedural Rock Asteroid Body */}
@@ -259,16 +278,13 @@ function AsteroidFieldNode({
         <pointLight ref={pointLightRef} color={hovered ? "#00F0FF" : "#EF4444"} intensity={2.5} distance={18} />
       )}
 
-      {/* Hover Tooltip Label */}
-      {hovered && (
-        <Html position={[0, 5.0, 0]} center zIndexRange={[100, 0]} style={{ pointerEvents: "none" }}>
-          <div className="bg-slate-900/90 border border-cyan-400/50 backdrop-blur-md px-3 py-1.5 rounded-md flex flex-col items-center min-w-[120px] shadow-[0_0_15px_rgba(0,240,255,0.3)] animate-pulse-fast">
-            <span className="text-[9px] font-mono font-bold uppercase text-cyan-400 tracking-widest mb-0.5">Mission Objective</span>
-            <span className="text-xs font-semibold text-white whitespace-nowrap text-center">{expNode.topic}</span>
-            <span className="text-[10px] text-slate-300 mt-0.5">Click to Explore</span>
-          </div>
-        </Html>
-      )}
+      {/* Floating Label (Fades in on hover) */}
+      <Html position={[0, 5.0, 0]} center zIndexRange={[100, 0]} style={{ pointerEvents: "none", opacity: hovered ? 1 : 0, transition: "opacity 0.2s" }}>
+        <div className="bg-slate-950/90 border border-cyan-500/50 backdrop-blur-md px-3 py-1.5 rounded-md flex flex-col items-center min-w-[120px] shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+          <span className="text-[10px] font-mono font-bold uppercase text-cyan-400 tracking-widest mb-0.5">◉ INSPECT</span>
+          <span className="text-xs font-semibold text-white whitespace-nowrap text-center">{expNode.topic}</span>
+        </div>
+      </Html>
 
       {/* Inline Holographic Warning HUD Label (Default state) */}
       {!hovered && isActiveObjective && (
@@ -328,8 +344,6 @@ function BackgroundAsteroids() {
     </group>
   );
 }
-
-import { useMissionStore } from "../../store/missionStore";
 
 export default function AsteroidSlalom({ onSelectExperience }: AsteroidSlalomProps) {
   const scroll = useScroll();

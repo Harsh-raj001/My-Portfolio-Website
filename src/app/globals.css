@@ -102,3 +102,15 @@ body.modal-open canvas {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
 }
+
+/* Force vertical scroll panning over R3F canvas on touch devices */
+canvas {
+  touch-action: pan-y !important;
+}
+
+/* Target Drei scroll container specifically to restore pointer events and enable native swipe scroll */
+canvas ~ div[style*="overflow: auto"],
+canvas ~ div[style*="overflow: scroll"] {
+  pointer-events: auto !important;
+  touch-action: pan-y !important;
+}

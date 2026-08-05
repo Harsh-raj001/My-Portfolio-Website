@@ -185,43 +185,29 @@ export default function MissionIntelligenceSearch({ isOpen, onClose, onSelectRes
                             <div className="text-sm font-semibold text-slate-200 group-hover:text-cyan-400 transition-colors">{r.title}</div>
                             <div className="flex flex-wrap items-center gap-2 mt-1">
                               <span className="text-[10px] text-slate-500 uppercase tracking-wider">{r.type}</span>
-                              {project && (
+                              {project && project.resources && (
                                 <div className="flex flex-wrap items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                                  {project.github && (
-                                    <ResourceLink href={project.github} className="text-[9px] font-mono bg-slate-800 border border-slate-700/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 px-1.5 py-0.5 rounded transition-all">
-                                      GitHub
-                                    </ResourceLink>
-                                  )}
-                                  {project.prd && (
-                                    <ResourceLink href={project.prd} className="text-[9px] font-mono bg-slate-800 border border-slate-700/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 px-1.5 py-0.5 rounded transition-all">
-                                      PRD
-                                    </ResourceLink>
-                                  )}
-                                  {project.live && (
-                                    <ResourceLink href={project.live} className="text-[9px] font-mono bg-slate-800 border border-slate-700/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 px-1.5 py-0.5 rounded transition-all">
-                                      Live Demo
-                                    </ResourceLink>
-                                  )}
-                                  {project.caseStudy && (
-                                    <ResourceLink href={project.caseStudy} className="text-[9px] font-mono bg-slate-800 border border-slate-700/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 px-1.5 py-0.5 rounded transition-all">
-                                      Case Study
-                                    </ResourceLink>
-                                  )}
-                                  {project.analytics && (
-                                    <ResourceLink href={project.analytics} className="text-[9px] font-mono bg-slate-800 border border-slate-700/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 px-1.5 py-0.5 rounded transition-all">
-                                      Analytics
-                                    </ResourceLink>
-                                  )}
-                                  {project.research && (
-                                    <ResourceLink href={project.research} className="text-[9px] font-mono bg-slate-800 border border-slate-700/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 px-1.5 py-0.5 rounded transition-all">
-                                      User Research
-                                    </ResourceLink>
-                                  )}
-                                  {project.publication && (
-                                    <ResourceLink href={project.publication} className="text-[9px] font-mono bg-slate-800 border border-slate-700/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 px-1.5 py-0.5 rounded transition-all">
-                                      Research Paper
-                                    </ResourceLink>
-                                  )}
+                                  {Object.entries(project.resources).map(([key, url]) => {
+                                    if (!url) return null;
+                                    let label = "";
+                                    switch(key) {
+                                      case 'liveDemo': label = "Live Demo"; break;
+                                      case 'github': label = "GitHub"; break;
+                                      case 'prd': label = "PRD"; break;
+                                      case 'caseStudy': label = "Case Study"; break;
+                                      case 'analytics': label = "Analytics"; break;
+                                      case 'research': label = "Research"; break;
+                                      case 'publication': label = "Publication"; break;
+                                      case 'documentation': label = "Docs"; break;
+                                      case 'demoVideo': label = "Video"; break;
+                                      default: label = "Link";
+                                    }
+                                    return (
+                                      <ResourceLink key={key} href={url} className="text-[9px] font-mono bg-slate-800 border border-slate-700/50 hover:border-cyan-500/50 text-slate-400 hover:text-cyan-400 px-1.5 py-0.5 rounded transition-all">
+                                        {label}
+                                      </ResourceLink>
+                                    );
+                                  })}
                                 </div>
                               )}
                             </div>

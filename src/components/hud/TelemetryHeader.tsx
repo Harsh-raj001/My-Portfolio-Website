@@ -2,14 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { EXPLORER_NAME, CHAPTERS } from "../../data/missionData";
+import { useMissionStore } from "../../store/missionStore";
 
-interface TelemetryHeaderProps {
-  progress: number; // 0.0 to 1.0
-}
-
-export default function TelemetryHeader({ 
-  progress 
-}: TelemetryHeaderProps) {
+export default function TelemetryHeader() {
+  const progress = useMissionStore(state => state.progress);
   const [activeChapter, setActiveChapter] = useState(CHAPTERS[0]);
   const [fps, setFps] = useState(60);
 
@@ -35,7 +31,7 @@ export default function TelemetryHeader({
   return (
     <header 
       aria-label="Aerospace Telemetry Header"
-      className="fixed top-3 left-3 sm:top-6 sm:left-6 z-50 pointer-events-none select-none font-mono text-[10px] sm:text-xs tracking-widest text-slate-300"
+      className="fixed top-3 left-3 sm:top-6 sm:left-6 z-50 pointer-events-none select-none font-mono text-[9px] sm:text-xs tracking-widest text-slate-300"
       style={{ 
         transform: "translate3d(0, 0, 0)", 
         willChange: "transform",
@@ -44,31 +40,31 @@ export default function TelemetryHeader({
       }}
     >
       {/* Top Left: Aerospace Telemetry Breadcrumb Tracker */}
-      <div className="flex items-center gap-3 bg-slate-950/85 backdrop-blur-md px-4 py-2 rounded-full border border-cyan-500/30 shadow-[0_0_20px_rgba(0,240,255,0.15)] pointer-events-auto">
+      <div className="flex items-center gap-2 sm:gap-3 bg-slate-950/85 backdrop-blur-md px-2.5 py-1 sm:px-4 sm:py-2 rounded-full border border-cyan-500/30 shadow-[0_0_20px_rgba(0,240,255,0.15)] pointer-events-auto">
         {/* Explorer Beacon */}
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-          <span className="text-white font-bold tracking-tighter uppercase">{EXPLORER_NAME}</span>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+          <span className="text-white font-bold tracking-tighter uppercase text-[9px] sm:text-xs hidden md:inline">{EXPLORER_NAME}</span>
+        </div>
+
+        <span className="text-white/20 hidden md:inline">|</span>
+
+        {/* Active Chapter Breadcrumb */}
+        <div className="text-amber-400 font-semibold tracking-wider text-[9px] sm:text-xs">
+          [{activeChapter.title}]
         </div>
 
         <span className="text-white/20">|</span>
 
-        {/* Active Chapter Breadcrumb */}
-        <div className="text-amber-400 font-semibold tracking-wider">
-          [{activeChapter.title}]
-        </div>
-
-        <span className="text-white/20 hidden sm:inline">|</span>
-
         {/* Real-Time Telemetry Stats */}
-        <div className="hidden sm:flex items-center gap-3 text-slate-400 text-[11px]">
+        <div className="flex items-center gap-2 sm:gap-3 text-slate-400 text-[9px] sm:text-[11px]">
           <span>SCROLL: <strong className="text-cyan-300">{scrollPercent}%</strong></span>
-          <span>•</span>
-          <span>DIST: <strong className="text-cyan-400">{distanceAU} AU</strong></span>
-          <span>•</span>
-          <span>DRAW CALLS: <strong className="text-emerald-400">12</strong></span>
-          <span>•</span>
-          <span>FPS: <strong className="text-emerald-400">{fps}</strong></span>
+          <span className="hidden md:inline">•</span>
+          <span className="hidden md:inline">DIST: <strong className="text-cyan-400">{distanceAU} AU</strong></span>
+          <span className="hidden md:inline">•</span>
+          <span className="hidden md:inline">DRAW CALLS: <strong className="text-emerald-400">12</strong></span>
+          <span className="hidden md:inline">•</span>
+          <span className="hidden md:inline">FPS: <strong className="text-emerald-400">{fps}</strong></span>
         </div>
       </div>
     </header>

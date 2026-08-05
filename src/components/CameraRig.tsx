@@ -144,20 +144,23 @@ export default function CameraRig() {
     cameraPos.set(targetX + floatX, targetY + floatY, targetZ);
     lookAtTarget.set(lookX, lookY, lookZ);
 
+    const isTeleporting = useMissionStore.getState().isTeleporting;
+
     // 4. Aerospace Hydraulic Damping (maath.easing.damp3 with 0.08 factor for AAA smoothness)
-    easing.damp3(camera.position, cameraPos, 0.08, delta);
+    // When skipping sections, disable damping for an instant snap.
+    easing.damp3(camera.position, cameraPos, isTeleporting ? 0 : 0.08, delta);
 
     // 5. Apply smooth lookAt orientation and roll banking
     camera.lookAt(lookAtTarget);
     if (rollAngle !== 0) {
-      easing.damp(camera.rotation, "z", rollAngle, 0.1, delta);
+      easing.damp(camera.rotation, "z", rollAngle, isTeleporting ? 0 : 0.1, delta);
     } else {
-      easing.damp(camera.rotation, "z", 0, 0.15, delta);
+      easing.damp(camera.rotation, "z", 0, isTeleporting ? 0 : 0.15, delta);
     }
 
     // 6. Dynamic FOV Interpolation (only update projection matrix when FOV changes)
     if (camera instanceof THREE.PerspectiveCamera) {
-      easing.damp(camera, "fov", targetFov, 0.12, delta);
+      easing.damp(camera, "fov", targetFov, isTeleporting ? 0 : 0.12, delta);
       // Only recalculate projection matrix if FOV actually changed (>0.01 deg)
       if (Math.abs(camera.fov - prevFov.current) > 0.01) {
         camera.updateProjectionMatrix();

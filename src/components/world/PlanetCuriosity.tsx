@@ -8,6 +8,7 @@ import { easing } from "maath";
 import { CURIOSITY_STORIES, CuriosityStory } from "../../data/missionData";
 import { audioEngine } from "../../lib/audioEngine";
 import { triggerHaptic } from "../../lib/haptics";
+import { useMissionStore } from "../../store/missionStore";
 
 interface PlanetVeridianProps {
   onSelectStory?: (story: CuriosityStory) => void;
@@ -51,8 +52,11 @@ function StoryBeacon({
 }) {
   const meshRef = useRef<THREE.Group>(null);
   const outerRingRef = useRef<THREE.Mesh>(null);
+  const pulseRingRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
   const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const setHoveringInteractive = useMissionStore(state => state.setHoveringInteractive);
   const targetScale = useMemo(() => new THREE.Vector3(1, 1, 1), []);
 
   // Convert absolute world coordinates to planet-relative coordinates (Planet group is at [0, -2, -60])
@@ -67,14 +71,19 @@ function StoryBeacon({
       // Float bobbing around orbital path
       meshRef.current.position.y = relPos[1] + Math.sin(state.clock.elapsedTime * 2 + relPos[0]) * 0.4;
       
-      // Smooth hover scale
-      const scaleVal = hovered ? 1.6 : 1.0;
+      // Smooth hover & click scale
+      const scaleVal = clicked ? 2.5 : hovered ? 1.6 : 1.0;
       targetScale.set(scaleVal, scaleVal, scaleVal);
       easing.damp3(meshRef.current.scale, targetScale, 0.15, delta);
     }
     if (outerRingRef.current) {
       outerRingRef.current.rotation.z += delta * 2;
       outerRingRef.current.rotation.x += delta * 1.5;
+    }
+    if (pulseRingRef.current) {
+      const pulse = 1.0 + Math.sin(state.clock.elapsedTime * 3) * 0.3;
+      pulseRingRef.current.scale.set(pulse, pulse, pulse);
+      (pulseRingRef.current.material as THREE.MeshBasicMaterial).opacity = 0.3 + Math.sin(state.clock.elapsedTime * 3) * 0.2;
     }
     if (materialRef.current) {
       // Animate emissive intensity
@@ -100,17 +109,22 @@ function StoryBeacon({
         onClick={(e) => {
           e.stopPropagation();
           triggerHaptic("light");
-          onSelect?.(story);
+          audioEngine.playModalOpen();
+          setClicked(true);
+          setTimeout(() => {
+            onSelect?.(story);
+            setClicked(false);
+          }, 250);
         }}
         onPointerOver={(e) => {
           e.stopPropagation();
           setHovered(true);
           audioEngine.playHoverPing();
-          document.body.style.cursor = "pointer";
+          setHoveringInteractive(true);
         }}
         onPointerOut={() => {
           setHovered(false);
-          document.body.style.cursor = "auto";
+          setHoveringInteractive(false);
         }}
       >
         {/* Invisible enlarged hitbox for reliable mobile/touch clicks */}
@@ -119,26 +133,19 @@ function StoryBeacon({
           <meshBasicMaterial transparent opacity={0} depthWrite={false} />
         </mesh>
 
-        {/* Hover Tooltip Label */}
-        {hovered && (
-          <Html position={[0, 2, 0]} center zIndexRange={[100, 0]} style={{ pointerEvents: "none" }}>
-            <div className="bg-slate-900/90 border border-emerald-500/50 backdrop-blur-md px-3 py-1.5 rounded-md flex flex-col items-center min-w-[120px] shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse-fast">
-              <span className="text-[9px] font-mono font-bold uppercase text-emerald-500 tracking-widest mb-0.5">Mission Objective</span>
-              <span className="text-xs font-semibold text-white whitespace-nowrap text-center">{story.topic}</span>
-              <span className="text-[10px] text-slate-300 mt-0.5">Click to Explore</span>
-            </div>
-          </Html>
-        )}
-        
-        {/* Default State Label (when not hovered, to show it's an interactable) */}
-        {!hovered && (
-          <Html position={[0, 1.5, 0]} center zIndexRange={[100, 0]} style={{ pointerEvents: "none" }}>
-            <div className="flex flex-col items-center opacity-70">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping mb-1" />
-              <span className="text-[8px] font-mono text-emerald-500 tracking-widest uppercase shadow-black drop-shadow-md">Detected</span>
-            </div>
-          </Html>
-        )}
+        {/* Persistent Cyan Pulse Affordance */}
+        <mesh ref={pulseRingRef}>
+          <ringGeometry args={[1.6, 1.8, 32]} />
+          <meshBasicMaterial color="#00F0FF" transparent opacity={0.5} side={THREE.DoubleSide} depthWrite={false} />
+        </mesh>
+
+        {/* Floating Label (Fades in on hover) */}
+        <Html position={[0, 2.5, 0]} center zIndexRange={[100, 0]} style={{ pointerEvents: "none", opacity: hovered ? 1 : 0, transition: "opacity 0.2s" }}>
+          <div className="bg-slate-950/90 border border-cyan-500/50 backdrop-blur-md px-3 py-1.5 rounded-md flex flex-col items-center min-w-[120px] shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+            <span className="text-[10px] font-mono font-bold uppercase text-cyan-400 tracking-widest mb-0.5">◉ INSPECT</span>
+            <span className="text-xs font-semibold text-white whitespace-nowrap text-center">{story.topic}</span>
+          </div>
+        </Html>
 
         {/* Inner Glowing Core */}
         <mesh castShadow>
@@ -165,8 +172,6 @@ function StoryBeacon({
     </group>
   );
 }
-
-import { useMissionStore } from "../../store/missionStore";
 
 export default function PlanetVeridian({ onSelectStory }: PlanetVeridianProps) {
   const planetRef = useRef<THREE.Mesh>(null);

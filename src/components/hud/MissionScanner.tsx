@@ -16,17 +16,23 @@ export default function MissionScanner() {
         if (!isScannerActive) {
           audioEngine.playHoverPing();
           setScannerActive(true);
-          
-          // Auto-disable scanner after 5 seconds
-          setTimeout(() => {
-            setScannerActive(false);
-          }, 5000);
+        } else {
+          setScannerActive(false);
         }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isScannerActive, setScannerActive]);
+
+  useEffect(() => {
+    if (isScannerActive) {
+      const timer = setTimeout(() => {
+        setScannerActive(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
   }, [isScannerActive, setScannerActive]);
 
   return (

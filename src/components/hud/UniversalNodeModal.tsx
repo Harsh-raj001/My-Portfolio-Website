@@ -70,7 +70,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 200 }}
-          className="bg-slate-900/90 border border-white/15 sm:max-w-2xl w-full max-h-[100dvh] sm:max-h-[85vh] rounded-t-3xl sm:rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] relative text-slate-100 overflow-hidden flex flex-col sm:m-4"
+          className="bg-slate-900/90 border border-white/15 sm:max-w-2xl w-full h-[100dvh] sm:h-[85vh] rounded-t-3xl sm:rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] relative text-slate-100 overflow-hidden flex flex-col sm:m-4"
           onClick={(e) => e.stopPropagation()}
           style={{ touchAction: "pan-y" }}
         >
@@ -174,28 +174,21 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
                 const projectKey = NODE_TO_PROJECT_MAP[node.id];
                 const project = projectKey ? ALL_PROJECTS.find(p => p.id === projectKey) : null;
 
-                if (project) {
-                  if (project.github) {
-                    cards.push({ label: "Source Code", sublabel: "GitHub ↗", url: project.github, type: "github" });
-                  }
-                  if (project.prd) {
-                    cards.push({ label: "View PRD Spec", sublabel: "Notion ↗", url: project.prd, type: "prd" });
-                  }
-                  if (project.live) {
-                    cards.push({ label: "Live Demo", sublabel: "Try it ↗", url: project.live, type: "live" });
-                  }
-                  if (project.caseStudy) {
-                    cards.push({ label: "Open Case Study", sublabel: "Notion ↗", url: project.caseStudy, type: "case-study" });
-                  }
-                  if (project.analytics) {
-                    cards.push({ label: "Open Analytics", sublabel: "Notion ↗", url: project.analytics, type: "analytics" });
-                  }
-                  if (project.research) {
-                    cards.push({ label: "Open Research", sublabel: "Notion ↗", url: project.research, type: "research" });
-                  }
-                  if (project.publication) {
-                    cards.push({ label: "Read Publication", sublabel: "ResearchGate ↗", url: project.publication, type: "publication" });
-                  }
+                if (project && project.resources) {
+                  Object.entries(project.resources).forEach(([key, url]) => {
+                    if (!url) return;
+                    switch(key) {
+                      case 'liveDemo': cards.push({ label: "Live Demo", sublabel: "Try it ↗", url, type: "live" }); break;
+                      case 'github': cards.push({ label: "GitHub Repository", sublabel: "Source ↗", url, type: "github" }); break;
+                      case 'prd': cards.push({ label: "PRD", sublabel: "Notion ↗", url, type: "prd" }); break;
+                      case 'caseStudy': cards.push({ label: "Case Study", sublabel: "Notion ↗", url, type: "case-study" }); break;
+                      case 'analytics': cards.push({ label: "Open Analytics", sublabel: "Notion ↗", url, type: "analytics" }); break;
+                      case 'research': cards.push({ label: "Open Research", sublabel: "Notion ↗", url, type: "research" }); break;
+                      case 'publication': cards.push({ label: "Read Publication", sublabel: "ResearchGate ↗", url, type: "publication" }); break;
+                      case 'documentation': cards.push({ label: "Documentation", sublabel: "Docs ↗", url, type: "prd" }); break;
+                      case 'demoVideo': cards.push({ label: "Demo Video", sublabel: "Watch ↗", url, type: "live" }); break;
+                    }
+                  });
                 } else if (node.id === "pt1") {
                   cards.push({ label: "Hyundai Case Study", sublabel: "Notion ↗", url: RESOURCES.CASE_STUDIES.hyundaiDealer, type: "case-study" });
                   cards.push({ label: "Hyundai PRD Spec", sublabel: "Notion ↗", url: RESOURCES.PRDS.hyundaiDealer, type: "prd" });
@@ -250,7 +243,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
               return (
                 <div className="space-y-3">
                   <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block text-center">Verified Evidence</span>
-                  <div className={`grid gap-3 ${cards.length === 1 ? 'grid-cols-1 max-w-xs mx-auto' : cards.length === 2 ? 'grid-cols-2 max-w-md mx-auto' : cards.length === 3 ? 'grid-cols-1 sm:grid-cols-3 max-w-xl mx-auto' : 'grid-cols-2 max-w-lg mx-auto'}`}>
+                  <div className="grid gap-3 w-full mx-auto" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))' }}>
                     {cards.map((card, idx) => (
                       <ResourceLink 
                         key={idx}

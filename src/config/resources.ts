@@ -27,8 +27,18 @@ export const RESOURCES = {
   FEATURED_PRODUCTS: {
     doclens: {
       github: "https://github.com/Harsh-raj001/DocLens-System-v1.0",
-      live: "https://doc-lens-system-v1-0-uzh2.vercel.app/",
+      live: "https://doc-lens-system-v1-0.vercel.app/",
       prd: "https://gravel-citrine-12a.notion.site/DocLens-System-v1-0-3a1142fbea2d804dacd7e03b8536396b?source=copy_link"
+    },
+    tripPalette: {
+      github: "https://github.com/Harsh-raj001/Trip-Palette",
+      live: "https://trip-palette.vercel.app/",
+      prd: "https://gravel-citrine-12a.notion.site/Trip-Palette-AI-Powered-Travel-Planner-3ae142fbea2d80ba8c6ccb89d1547521?source=copy_link"
+    },
+    marketLens: {
+      github: "https://github.com/Harsh-raj001/MarketLens",
+      live: "https://market-lens-chi.vercel.app/",
+      prd: "https://gravel-citrine-12a.notion.site/MarketLens-565142fbea2d83dc8ae901d526eb9c07?source=copy_link"
     },
     resumeAnalyzer: {
       github: "https://github.com/Harsh-raj001/Resume-Analyzer-v1",
@@ -43,6 +53,8 @@ export const RESOURCES = {
 
   PRDS: {
     doclens: "https://gravel-citrine-12a.notion.site/DocLens-System-v1-0-3a1142fbea2d804dacd7e03b8536396b?source=copy_link",
+    tripPalette: "https://gravel-citrine-12a.notion.site/Trip-Palette-AI-Powered-Travel-Planner-3ae142fbea2d80ba8c6ccb89d1547521?source=copy_link",
+    marketLens: "https://gravel-citrine-12a.notion.site/MarketLens-565142fbea2d83dc8ae901d526eb9c07?source=copy_link",
     resumeAnalyzer: "https://gravel-citrine-12a.notion.site/AI-Resume-Analyser-v0-5-39d142fbea2d805486edd3956309ba12?source=copy_link",
     jobAgent: "https://gravel-citrine-12a.notion.site/Autonomous-Job-Agent-3ab142fbea2d8053ac19de395f618b6a?source=copy_link",
     hyundaiDealer: "https://gravel-citrine-12a.notion.site/PRD-Hyundai-Dealer-Field-Rep-Mobile-Companion-d8c142fbea2d832aa58981046328f94d?source=copy_link",
@@ -54,6 +66,7 @@ export const RESOURCES = {
   },
 
   CASE_STUDIES: {
+    marketLens: "https://gravel-citrine-12a.notion.site/MarketLens-38c142fbea2d800cbee3cced11c3674a?source=copy_link",
     hyundaiDealer: "https://gravel-citrine-12a.notion.site/Hyundai-Dealer-Connect-38c142fbea2d8094b276e9518ad476ec?source=copy_link",
     tradelog: "https://gravel-citrine-12a.notion.site/TradeLog-NIFTY-50-Swing-Trade-Journal-38c142fbea2d800cbee3cced11c3674a?source=copy_link",
     metroPlaybook: "https://gravel-citrine-12a.notion.site/The-Metro-Playbook-Doesn-t-Transfer-397142fbea2d809daea8c60c3431f818?source=copy_link",

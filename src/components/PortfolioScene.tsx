@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, Suspense, useCallback, useEffect } from "react";
+import React, { useState, useRef, Suspense, useCallback, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { ScrollControls, useScroll } from "@react-three/drei";
+import { ScrollControls, useScroll, Html } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { motion, AnimatePresence } from "framer-motion";
 import { qualitySettings } from "../lib/qualityTier";
@@ -12,14 +12,15 @@ import { triggerHaptic } from "../lib/haptics";
 import CameraRig from "./CameraRig";
 import EnvironmentSetup from "./Environment";
 import AudioController from "./AudioController";
-import Spacecraft from "./world/Spacecraft";
-import PlanetCuriosity from "./world/PlanetCuriosity";
-import AsteroidSlalom from "./world/AsteroidSlalom";
-import PlanetLearning from "./world/PlanetLearning";
-import WormholeTransition from "./world/WormholeTransition";
-import BuilderStation from "./world/BuilderStation";
-import DysonSphere from "./world/DysonSphere";
-import StarfieldAndNebula from "./world/StarfieldAndNebula";
+
+const Spacecraft = React.lazy(() => import("./world/Spacecraft"));
+const PlanetCuriosity = React.lazy(() => import("./world/PlanetCuriosity"));
+const AsteroidSlalom = React.lazy(() => import("./world/AsteroidSlalom"));
+const PlanetLearning = React.lazy(() => import("./world/PlanetLearning"));
+const WormholeTransition = React.lazy(() => import("./world/WormholeTransition"));
+const BuilderStation = React.lazy(() => import("./world/BuilderStation"));
+const DysonSphere = React.lazy(() => import("./world/DysonSphere"));
+const StarfieldAndNebula = React.lazy(() => import("./world/StarfieldAndNebula"));
 
 // HUD & Modal Components
 import HUD from "./HUD";
@@ -38,6 +39,10 @@ import MissionScanner from "./hud/MissionScanner";
 import LevelProgressionOverlay from "./hud/LevelProgressionOverlay";
 import MissionObjectivePanel from "./hud/MissionObjectivePanel";
 import MissionCompleteSequence from "./hud/MissionCompleteSequence";
+import AIScannerHUDControl from "./hud/AIScannerHUDControl";
+import ProgressiveGuide from "./hud/ProgressiveGuide";
+import CustomCursor from "./hud/CustomCursor";
+import InteractionHintToast from "./hud/InteractionHintToast";
 
 // Types & Audio
 import { CuriosityStory, ExperienceNode, ProductThinkingNode, PortfolioProject, PRDVaultItem } from "../types/mission";
@@ -48,26 +53,73 @@ type OperatingMode = "MISSION" | "TRANSITIONING_TO_EXEC" | "EXEC" | "TRANSITIONI
 
 import { useMissionStore, ChapterId } from "../store/missionStore";
 
+function LoaderFallback() {
+  return (
+    <Html center>
+      <div className="flex flex-col items-center justify-center pointer-events-none select-none">
+        <div className="w-8 h-8 rounded-full border border-cyan-400/50 flex items-center justify-center relative">
+          <div className="absolute inset-0 rounded-full bg-cyan-400/20 animate-ping" />
+          <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+        </div>
+        <div className="mt-4 text-[10px] font-mono text-cyan-500 uppercase tracking-widest text-center whitespace-nowrap drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]">
+          Live Telemetry Stream<br/>
+          <span className="text-slate-400 text-[8px] animate-pulse">Establishing Connection...</span>
+        </div>
+      </div>
+    </Html>
+  );
+}
+
 // Lightweight bridge to sync WebGL scroll offset with HTML DOM state without 60fps thrashing
-function ScrollTracker({ onProgressChange }: { onProgressChange: (p: number) => void }) {
+function ScrollTracker() {
   const scroll = useScroll();
   const lastReported = useRef(-1);
+  const lastOffset = useRef(0);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const setCurrentChapter = useMissionStore(state => state.setCurrentChapter);
+  const setProgress = useMissionStore(state => state.setProgress);
+  const setScrolling = useMissionStore(state => state.setScrolling);
+  const setHasScrolled = useMissionStore(state => state.setHasScrolled);
+  const setHasOpenedScanner = useMissionStore(state => state.setHasOpenedScanner);
+  const isScannerActive = useMissionStore(state => state.isScannerActive);
+
+  // Track if scanner is opened
+  useEffect(() => {
+    if (isScannerActive) {
+      setHasOpenedScanner(true);
+    }
+  }, [isScannerActive, setHasOpenedScanner]);
 
   useFrame(() => {
     const current = scroll.offset;
+    
+    // Detect scrolling activity
+    if (current !== lastOffset.current) {
+      lastOffset.current = current;
+      setScrolling(true);
+      
+      if (current > 0.001) {
+        setHasScrolled(true);
+      }
+
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+      scrollTimeout.current = setTimeout(() => {
+        setScrolling(false);
+      }, 250);
+    }
+
     // Throttle React state updates to when progress changes meaningfully (>0.5%)
-    if (Math.abs(current - lastReported.current) > 0.005) {
+    if (Math.abs(current - lastReported.current) > 0.002) {
       lastReported.current = current;
-      onProgressChange(current);
+      setProgress(current);
       
       // Update global chapter state
       let chapter: ChapterId = "LAUNCHPAD";
       if (current >= 0.08 && current < 0.26) chapter = "PLANET_CURIOSITY";
       else if (current >= 0.26 && current < 0.40) chapter = "ASTEROID_SLALOM";
-      else if (current >= 0.40 && current < 0.62) chapter = "ORBITAL_NEXUS";
+      else if (current >= 0.40 && current < 0.62) chapter = "SYNTHESIS_V";
       else if (current >= 0.62 && current < 0.72) chapter = "WORMHOLE";
-      else if (current >= 0.72 && current < 0.88) chapter = "SYNTHESIS_V";
+      else if (current >= 0.72 && current < 0.88) chapter = "ORBITAL_NEXUS";
       else if (current >= 0.88) chapter = "DYSON_SPHERE";
       
       const currentChapter = useMissionStore.getState().currentChapter;
@@ -77,20 +129,34 @@ function ScrollTracker({ onProgressChange }: { onProgressChange: (p: number) => 
     }
   });
 
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    };
+  }, []);
+
   return null;
 }
 
 // 1-Click Sector Teleporter Bridge
 function ScrollTeleporter({ targetProgress, onComplete }: { targetProgress: number | null; onComplete: () => void }) {
   const scroll = useScroll();
+  const setIsTeleporting = useMissionStore(state => state.setIsTeleporting);
   
   useEffect(() => {
     if (targetProgress !== null && scroll && scroll.el) {
+      setIsTeleporting(true);
       const targetTop = targetProgress * (scroll.el.scrollHeight - scroll.el.clientHeight);
-      scroll.el.scrollTo({ top: targetTop, behavior: "smooth" });
-      onComplete();
+      scroll.el.scrollTo({ top: targetTop, behavior: "auto" });
+      
+      // Briefly hold teleporting state so camera snaps instantly
+      setTimeout(() => {
+        setIsTeleporting(false);
+        onComplete();
+      }, 100);
     }
-  }, [targetProgress, scroll, onComplete]);
+  }, [targetProgress, scroll, onComplete, setIsTeleporting]);
 
   return null;
 }
@@ -131,14 +197,30 @@ function GlobalIdleTracker() {
 }
 
 export default function PortfolioScene() {
-  const [progress, setProgress] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const [teleportTarget, setTeleportTarget] = useState<number | null>(null);
   
   const markNodeVisited = useMissionStore(state => state.markNodeVisited);
   
   // Dual Operating System State Machine
-  const [operatingMode, setOperatingMode] = useState<OperatingMode>("MISSION");
+  const [operatingMode, setOperatingMode] = useState<OperatingMode>(() => {
+    if (typeof window !== "undefined") {
+      const hasVisited = localStorage.getItem("odyssey_has_visited");
+      if (hasVisited) {
+        return (localStorage.getItem("odyssey_last_mode") as OperatingMode) || "MISSION";
+      }
+    }
+    return "TRANSITIONING_TO_MISSION";
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (operatingMode === "MISSION" || operatingMode === "EXEC") {
+        localStorage.setItem("odyssey_last_mode", operatingMode);
+        localStorage.setItem("odyssey_has_visited", "true");
+      }
+    }
+  }, [operatingMode]);
   const [execSearchQuery] = useState("");
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
@@ -151,6 +233,7 @@ export default function PortfolioScene() {
 
   const isExecutiveMode = operatingMode === "EXEC" || operatingMode === "TRANSITIONING_TO_EXEC";
   const isModalOpen = !!(selectedStory || selectedExperience || selectedProductThinking || selectedLab || selectedPRD);
+  const isTeleporting = useMissionStore(state => state.isTeleporting);
 
   // Handlers with sound feedback & mobile haptics
   const handleSelectStory = useCallback((story: CuriosityStory) => {
@@ -320,7 +403,8 @@ export default function PortfolioScene() {
   return (
     <div className="relative w-screen h-screen bg-black overflow-hidden select-none">
       {/* --- DOM HUD OVERLAYS (OUTSIDE WEBGL CANVAS) --- */}
-      <TelemetryHeader progress={progress} />
+      <CustomCursor />
+      <TelemetryHeader />
       
       <ExecFastTrackHUD 
         onTeleport={(target) => setTeleportTarget(target)} 
@@ -348,14 +432,11 @@ export default function PortfolioScene() {
       />
       
       <AIMissionLog 
-        progress={progress} 
         operatingMode={operatingMode}
         searchQuery={execSearchQuery}
       />
       
-      <FinaleContactDock 
-        progress={progress} 
-      />
+      <FinaleContactDock />
 
       {/* --- UNIVERSAL INTERACTIVE NODE MODAL (LAW 8 READ FOCUS) --- */}
       <UniversalNodeModal 
@@ -372,6 +453,19 @@ export default function PortfolioScene() {
 
       {/* First-Time Visit Onboarding */}
       <OnboardingOverlay />
+
+      {/* Floating AI Scanner HUD Control */}
+      {!isExecutiveMode && (
+        <AIScannerHUDControl />
+      )}
+
+      {/* Action-Driven Progressive Guide & Interaction Toast */}
+      {!isExecutiveMode && (
+        <>
+          <ProgressiveGuide />
+          <InteractionHintToast />
+        </>
+      )}
 
       {/* AAA UX Enhancements */}
       {!isExecutiveMode && (
@@ -426,21 +520,31 @@ export default function PortfolioScene() {
         )}
       </AnimatePresence>
 
+      {/* Mobile Experience Banner */}
+      {!isExecutiveMode && (
+        <div className="fixed top-24 inset-x-0 z-[60] flex justify-center md:hidden pointer-events-none px-4">
+          <div className="bg-slate-900/90 backdrop-blur border border-cyan-500/30 text-cyan-400 text-[10px] font-mono tracking-widest px-4 py-2 rounded-full uppercase shadow-[0_0_15px_rgba(0,240,255,0.15)] text-center leading-relaxed">
+            For the best cinematic experience, enable Desktop site in your browser (Chrome menu → Desktop site)
+          </div>
+        </div>
+      )}
+
       {/* --- 3D CINEMATIC WEBGL CANVAS --- */}
       <Canvas
+        style={{ touchAction: "none" }}
         camera={{ position: [0, 2, 15], fov: 45, near: 0.1, far: 800 }}
         gl={{ 
-          antialias: qualitySettings.antialias, 
+          antialias: true, 
           powerPreference: "high-performance",
           stencil: false,
           depth: true,
         }}
-        dpr={qualitySettings.dpr}
+        dpr={[1, 1.5]}
         frameloop={isModalOpen ? "never" : "always"}
       >
-        <Suspense fallback={null}>
-          <ScrollControls pages={16} damping={0.25}>
-            <ScrollTracker onProgressChange={setProgress} />
+        <Suspense fallback={<LoaderFallback />}>
+          <ScrollControls pages={16} damping={isTeleporting ? 0 : 0.25}>
+            <ScrollTracker />
             <ScrollTeleporter targetProgress={teleportTarget} onComplete={() => setTeleportTarget(null)} />
 
             {/* Camera Drone & Flight Dynamics */}

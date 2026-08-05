@@ -25,6 +25,11 @@ export default function ExecFastTrackHUD({
   onOpenCommandPalette
 }: ExecFastTrackHUDProps) {
   const [showToast, setShowToast] = useState(false);
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
+
+  useEffect(() => {
+    setIsMobileDevice(isMobile);
+  }, []);
 
   useEffect(() => {
     if (isExecutiveMode) {
@@ -79,7 +84,7 @@ export default function ExecFastTrackHUD({
 
       <nav 
         aria-label="Recruiter Fast-Track Bypass Navigation"
-        className="fixed top-3 right-3 sm:top-6 sm:right-6 z-50 flex flex-wrap items-center justify-end gap-2 pointer-events-auto font-mono text-xs select-none max-w-full px-2 sm:px-0"
+        className="fixed top-14 right-3 sm:top-6 sm:right-6 z-50 flex flex-wrap items-center justify-end gap-2 pointer-events-auto font-mono text-xs select-none max-w-full px-2 sm:px-0"
         style={{ 
           transform: "translate3d(0, 0, 0)", 
           willChange: "transform",
@@ -101,7 +106,7 @@ export default function ExecFastTrackHUD({
         </button>
 
         {/* 🚀 DUAL OPERATING SYSTEM SWITCHER (MISSION MODE vs EXEC MODE) */}
-        {isMobile ? (
+        {isMobileDevice ? (
           <button
             onClick={() => {
               if (isExecutiveMode) {

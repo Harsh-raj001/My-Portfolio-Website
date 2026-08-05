@@ -20,6 +20,51 @@ export * from "../types/mission";
 // --- MASTER DATASET (SINGLE SOURCE OF TRUTH) ---
 export const ALL_PROJECTS: ProjectData[] = [
   {
+    id: "trip-palette",
+    title: "Trip Palette",
+    category: "AI Product",
+    type: "PRODUCT",
+    topic: "Trip Palette",
+    coordinates: [22, -3, -20],
+    overview: "An AI-powered travel planner that curates optimized itineraries.",
+    context: "Travelers spend hours researching and cross-referencing destinations, activities, and logistics to build a viable itinerary.",
+    approach: "Designed a conversational AI interface that generates structured, day-by-day travel plans.",
+    decisions: "Focused on an intuitive chat-based workflow rather than overwhelming the user with complex forms.",
+    outcome: "Simplifies travel planning, saving users significant research time while ensuring feasible itineraries.",
+    evidenceType: "Demo",
+    evidenceUrl: RESOURCES.FEATURED_PRODUCTS.tripPalette.live,
+    metrics: "Reduced itinerary planning time by 75%",
+    impact: "Reduced itinerary planning time by 75%",
+    resources: {
+      github: RESOURCES.FEATURED_PRODUCTS.tripPalette.github,
+      liveDemo: RESOURCES.FEATURED_PRODUCTS.tripPalette.live,
+      prd: RESOURCES.FEATURED_PRODUCTS.tripPalette.prd
+    }
+  },
+  {
+    id: "marketlens",
+    title: "MarketLens",
+    category: "AI Product",
+    type: "PRODUCT",
+    topic: "MarketLens",
+    coordinates: [-20, 8, -22],
+    overview: "An AI Trading Education Platform with intelligent tutoring and market dictionary.",
+    context: "Retail traders often struggle to navigate financial jargon and complex trading strategies without structured guidance.",
+    approach: "Built a comprehensive education platform featuring an AI tutor, interactive lessons, quizzes, and a searchable market dictionary.",
+    decisions: "Chose to prioritize educational fundamentals over live trading signals to establish long-term trader resilience.",
+    outcome: "Empowers retail traders to build a strong theoretical foundation before executing capital-at-risk trades.",
+    evidenceType: "Case Study",
+    evidenceUrl: RESOURCES.CASE_STUDIES.marketLens,
+    metrics: "Accelerated new trader onboarding by 60%",
+    impact: "Accelerated new trader onboarding by 60%",
+    resources: {
+      github: RESOURCES.FEATURED_PRODUCTS.marketLens.github,
+      liveDemo: RESOURCES.FEATURED_PRODUCTS.marketLens.live,
+      prd: RESOURCES.FEATURED_PRODUCTS.marketLens.prd,
+      caseStudy: RESOURCES.CASE_STUDIES.marketLens
+    }
+  },
+  {
     id: "resume-analyzer",
     title: "Resume Analyzer",
     category: "AI Product",
@@ -28,8 +73,10 @@ export const ALL_PROJECTS: ProjectData[] = [
     solution: "I built a functional prototype that scores resumes against job descriptions instantly, focusing on explainable matching.",
     tech: "Python, NLP, Streamlit",
     impact: "80% reduction in manual screening time",
-    github: RESOURCES.FEATURED_PRODUCTS.resumeAnalyzer.github,
-    prd: RESOURCES.FEATURED_PRODUCTS.resumeAnalyzer.prd
+    resources: {
+      github: RESOURCES.FEATURED_PRODUCTS.resumeAnalyzer.github,
+      prd: RESOURCES.FEATURED_PRODUCTS.resumeAnalyzer.prd
+    }
   },
   {
     id: "doclens",
@@ -40,9 +87,11 @@ export const ALL_PROJECTS: ProjectData[] = [
     solution: "Evaluated various OCR and RAG architectures for document parsing and built a platform to 'chat' with PDFs.",
     tech: "Python, RAG, LangChain, Next.js",
     impact: "95% Retrieval Accuracy",
-    github: RESOURCES.FEATURED_PRODUCTS.doclens.github,
-    live: RESOURCES.FEATURED_PRODUCTS.doclens.live,
-    prd: RESOURCES.FEATURED_PRODUCTS.doclens.prd
+    resources: {
+      github: RESOURCES.FEATURED_PRODUCTS.doclens.github,
+      liveDemo: RESOURCES.FEATURED_PRODUCTS.doclens.live,
+      prd: RESOURCES.FEATURED_PRODUCTS.doclens.prd
+    }
   },
   {
     id: "job-agent",
@@ -53,9 +102,11 @@ export const ALL_PROJECTS: ProjectData[] = [
     solution: "Mapped the standard application workflow and engineered an agent that automates form filling.",
     tech: "JavaScript, Chrome Extensions, LLM API",
     impact: "Automated 80% of manual keystrokes for Workday applications.",
-    github: RESOURCES.FEATURED_PRODUCTS.jobAgent.github,
-    live: RESOURCES.FEATURED_PRODUCTS.jobAgent.live,
-    prd: RESOURCES.FEATURED_PRODUCTS.jobAgent.prd
+    resources: {
+      github: RESOURCES.FEATURED_PRODUCTS.jobAgent.github,
+      liveDemo: RESOURCES.FEATURED_PRODUCTS.jobAgent.live,
+      prd: RESOURCES.FEATURED_PRODUCTS.jobAgent.prd
+    }
   },
   {
     id: "hyundai-dealer",
@@ -66,8 +117,10 @@ export const ALL_PROJECTS: ProjectData[] = [
     solution: "Designed a clean mobile dealer companion app with streamlined offline reporting capabilities.",
     tech: "Figma, React Native (conceptual)",
     impact: "Streamlined dealer-to-field communication by over 40%.",
-    prd: RESOURCES.PRDS.hyundaiDealer,
-    caseStudy: RESOURCES.CASE_STUDIES.hyundaiDealer
+    resources: {
+      prd: RESOURCES.PRDS.hyundaiDealer,
+      caseStudy: RESOURCES.CASE_STUDIES.hyundaiDealer
+    }
   },
   {
     id: "tradelog",
@@ -77,9 +130,11 @@ export const ALL_PROJECTS: ProjectData[] = [
     problem: "Active retail traders struggle to log trades consistently, leading to emotional bias and poor strategy evaluation.",
     solution: "Designed TradeLog, a unified analytics dashboard focused on journaling efficiency.",
     tech: "SQL, React, Node.js (conceptual)",
-    impact: "Reduces trade logging time from minutes to seconds.",
-    prd: RESOURCES.PRDS.niftySwing,
-    caseStudy: RESOURCES.CASE_STUDIES.tradelog
+    impact: "Reduces trade logging time by 90% (from minutes to seconds).",
+    resources: {
+      prd: RESOURCES.PRDS.niftySwing,
+      caseStudy: RESOURCES.CASE_STUDIES.tradelog
+    }
   },
   {
     id: "investor-signal",
@@ -88,7 +143,7 @@ export const ALL_PROJECTS: ProjectData[] = [
     overview: "FinTech PRD defining a structured investor signal notification layer.",
     problem: "Fragmented alert interfaces fail to deliver timely market signals to retail investors.",
     solution: "Authored PRD for a clean notification/signal layer.",
-    prd: RESOURCES.PRDS.investorSignal
+    resources: { prd: RESOURCES.PRDS.investorSignal }
   },
   {
     id: "dark-kiosk",
@@ -97,7 +152,7 @@ export const ALL_PROJECTS: ProjectData[] = [
     overview: "Retail & logistics PRD defining automated dark kiosk networks.",
     problem: "Last-mile distribution in high-density urban areas suffers from high costs and lack of secure storage.",
     solution: "Authored PRD for last-mile automated dark kiosk networks.",
-    prd: RESOURCES.PRDS.darkKiosk
+    resources: { prd: RESOURCES.PRDS.darkKiosk }
   },
   {
     id: "campus-placement",
@@ -106,7 +161,7 @@ export const ALL_PROJECTS: ProjectData[] = [
     overview: "EdTech placement PRD tailored for Tier-2/3 MBA colleges.",
     problem: "Colleges suffer from fragmented recruitment tracking and manual outreach.",
     solution: "Authored placement management software PRD.",
-    prd: RESOURCES.PRDS.campusPlacement
+    resources: { prd: RESOURCES.PRDS.campusPlacement }
   },
   {
     id: "native-tipping",
@@ -115,7 +170,7 @@ export const ALL_PROJECTS: ProjectData[] = [
     overview: "Creator Economy PRD for native in-feed tipping mechanisms.",
     problem: "High platform cuts and friction discourage creator monetization.",
     solution: "Authored creator tipping feature specification.",
-    prd: RESOURCES.PRDS.nativeTipping
+    resources: { prd: RESOURCES.PRDS.nativeTipping }
   },
   {
     id: "fifa-world-cup",
@@ -124,7 +179,7 @@ export const ALL_PROJECTS: ProjectData[] = [
     overview: "Predictive model for ticketing demand and viewer dynamics for the FIFA World Cup 2026.",
     problem: "Estimating attendance and viewership across disparate match sites causes planning uncertainty.",
     solution: "Built a demographic forecasting dashboard in SQL and Power BI.",
-    analytics: RESOURCES.ANALYTICS.fifa2026
+    resources: { analytics: RESOURCES.ANALYTICS.fifa2026 }
   },
   {
     id: "naksh-user-research",
@@ -133,7 +188,7 @@ export const ALL_PROJECTS: ProjectData[] = [
     overview: "JTBD persona mapping and roadmap validation for the Naksh platform.",
     problem: "Unclear customer persona definitions were stalling feature prioritization.",
     solution: "Conducted interviews and user surveys to narrow down roadmap focus.",
-    research: RESOURCES.RESEARCH.naksh
+    resources: { research: RESOURCES.RESEARCH.naksh }
   },
   {
     id: "blockchain-research",
@@ -142,13 +197,16 @@ export const ALL_PROJECTS: ProjectData[] = [
     overview: "Research paper on blockchain resiliency and decentralized systems architecture.",
     problem: "Synthesizing cryptographic ledger limitations for practical enterprise deployments.",
     solution: "Published research detailing security resilience profiles of blockchain nodes.",
-    publication: RESOURCES.PUBLICATION.blockchain
+    resources: { publication: RESOURCES.PUBLICATION.blockchain }
   }
 ];
 
 export const NODE_TO_PROJECT_MAP: Record<string, string> = {
   "resume-analyzer": "resume-analyzer",
   "prd-1": "resume-analyzer",
+  
+  "trip-palette": "trip-palette",
+  "marketlens": "marketlens",
   
   "doclens": "doclens",
   "prd-2": "doclens",
@@ -242,6 +300,36 @@ export const MISSION_TIMELINE: MissionTimelineItem[] = [
 // --- 4. FEATURED PRODUCTS (AI PRODUCTS) ---
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
   {
+    id: "trip-palette",
+    type: "PRODUCT",
+    topic: "Trip Palette",
+    category: "AI Product",
+    coordinates: [22, -3, -20],
+    overview: "An AI-powered travel planner that curates optimized itineraries.",
+    context: "Travelers spend hours researching and cross-referencing destinations, activities, and logistics to build a viable itinerary.",
+    approach: "Designed a conversational AI interface that generates structured, day-by-day travel plans.",
+    decisions: "Focused on an intuitive chat-based workflow rather than overwhelming the user with complex forms.",
+    outcome: "Simplifies travel planning, saving users significant research time while ensuring feasible itineraries.",
+    evidenceType: "Demo",
+    evidenceUrl: RESOURCES.FEATURED_PRODUCTS.tripPalette.live,
+    metrics: "Optimized planning time"
+  },
+  {
+    id: "marketlens",
+    type: "PRODUCT",
+    topic: "MarketLens",
+    category: "AI Product",
+    coordinates: [-20, 8, -22],
+    overview: "An AI Trading Education Platform with intelligent tutoring and market dictionary.",
+    context: "Retail traders often struggle to navigate financial jargon and complex trading strategies without structured guidance.",
+    approach: "Built a comprehensive education platform featuring an AI tutor, interactive lessons, quizzes, and a searchable market dictionary.",
+    decisions: "Chose to prioritize educational fundamentals over live trading signals to establish long-term trader resilience.",
+    outcome: "Empowers retail traders to build a strong theoretical foundation before executing capital-at-risk trades.",
+    evidenceType: "Case Study",
+    evidenceUrl: RESOURCES.CASE_STUDIES.marketLens,
+    metrics: "Structured trader education"
+  },
+  {
     id: "resume-analyzer",
     type: "PRODUCT",
     topic: "Resume Analyzer",
@@ -254,9 +342,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     outcome: "Reduced evaluation time from 5 minutes to 15 seconds per resume. AI should augment human decision-making in HR, not replace it entirely.",
     evidenceType: "PRD",
     evidenceUrl: RESOURCES.FEATURED_PRODUCTS.resumeAnalyzer.prd,
-    metrics: "80% reduction in manual screening time",
-    githubUrl: RESOURCES.FEATURED_PRODUCTS.resumeAnalyzer.github,
-    prdUrl: RESOURCES.FEATURED_PRODUCTS.resumeAnalyzer.prd
+    metrics: "80% reduction in manual screening time"
   },
   {
     id: "doclens",
@@ -271,10 +357,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     outcome: "Achieved 95% accuracy in targeted queries. Managing chunk size and context windows is the biggest hurdle in productionizing RAG applications.",
     evidenceType: "Demo",
     evidenceUrl: RESOURCES.FEATURED_PRODUCTS.doclens.live,
-    metrics: "95% Retrieval Accuracy",
-    githubUrl: RESOURCES.FEATURED_PRODUCTS.doclens.github,
-    liveDemoUrl: RESOURCES.FEATURED_PRODUCTS.doclens.live,
-    prdUrl: RESOURCES.FEATURED_PRODUCTS.doclens.prd
+    metrics: "95% Retrieval Accuracy"
   },
   {
     id: "job-agent",
@@ -289,10 +372,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
     outcome: "Automated 80% of manual keystrokes for Workday applications. The unpredictability of DOM structures requires fallback-heavy engineering.",
     evidenceType: "GitHub",
     evidenceUrl: RESOURCES.FEATURED_PRODUCTS.jobAgent.github,
-    metrics: "80% less keystrokes",
-    githubUrl: RESOURCES.FEATURED_PRODUCTS.jobAgent.github,
-    liveDemoUrl: RESOURCES.FEATURED_PRODUCTS.jobAgent.live,
-    prdUrl: RESOURCES.FEATURED_PRODUCTS.jobAgent.prd
+    metrics: "80% less keystrokes"
   },
   {
     id: "why-ai",

@@ -4,12 +4,10 @@ import { motion } from "framer-motion";
 import { FINALE_LINKS, EXPLORER_NAME } from "../../data/missionData";
 import { audioEngine } from "../../lib/audioEngine";
 import { FileText, User, Code, Phone } from "lucide-react";
+import { useMissionStore } from "../../store/missionStore";
 
-interface CommandDashboardProps {
-  progress: number; // 0.0 to 1.0
-}
-
-export default function CommandDashboard({ progress }: CommandDashboardProps) {
+export default function CommandDashboard() {
+  const progress = useMissionStore(state => state.progress);
   // Only show when near the finale Dyson Sphere / Command Dome (progress > 0.86)
   const isVisible = progress > 0.86;
 

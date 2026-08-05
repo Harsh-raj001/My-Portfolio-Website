@@ -20,7 +20,7 @@ import { audioEngine } from "../../lib/audioEngine";
 import { 
   Search, ChevronRight, Activity, Cpu, 
   FileText, Briefcase, BarChart2, Layers, Map,
-  Award, Mail, BookOpen, User, Code, File, Phone, Globe, Eye
+  Award, Mail, BookOpen, User, Code, File, Phone, Globe, Eye, ExternalLink
 } from "lucide-react";
 import MissionIntelligenceSearch from "./MissionIntelligenceSearch";
 import CountUp from "./CountUp";
@@ -74,43 +74,43 @@ export default function ExecCommandCenter({
 
   // Sections data mapped from central single source of truth ALL_PROJECTS
   const filteredProjects = PORTFOLIO_PROJECTS;
-  const filteredCaseStudies = ALL_PROJECTS.filter(p => p.caseStudy).map(p => ({
+  const filteredCaseStudies = ALL_PROJECTS.filter(p => p.resources?.caseStudy).map(p => ({
     id: p.id,
     topic: p.title,
     overview: p.problem || p.overview,
     decisions: p.solution || p.impact || "",
-    evidenceUrl: p.caseStudy
+    evidenceUrl: p.resources?.caseStudy
   }));
-  const filteredPRDs = ALL_PROJECTS.filter(p => p.prd).map(p => {
-    const vaultItem = PRD_VAULT.find(v => v.prdUrl === p.prd);
+  const filteredPRDs = ALL_PROJECTS.filter(p => p.resources?.prd).map(p => {
+    const vaultItem = PRD_VAULT.find(v => v.prdUrl === p.resources?.prd);
     return {
       id: p.id,
       title: p.title,
       domain: vaultItem?.domain || (p.category === "AI Product" ? "AI/Automation" : "Product Management"),
       problem: p.problem || p.overview,
       readingTime: vaultItem?.readingTime || "5 min",
-      prdUrl: p.prd!
+      prdUrl: p.resources?.prd!
     };
   });
-  const filteredResearch = ALL_PROJECTS.filter(p => p.category === "User Research").map(p => ({
+  const filteredResearch = ALL_PROJECTS.filter(p => p.resources?.research).map(p => ({
     id: p.id,
     topic: p.title,
     overview: p.overview,
-    evidenceUrl: p.research
+    evidenceUrl: p.resources?.research
   }));
-  const filteredAnalytics = ALL_PROJECTS.filter(p => p.category === "Analytics").map(p => ({
+  const filteredAnalytics = ALL_PROJECTS.filter(p => p.resources?.analytics).map(p => ({
     id: p.id,
     topic: p.title,
     overview: p.overview,
-    evidenceUrl: p.analytics
+    evidenceUrl: p.resources?.analytics
   }));
   const filteredCerts = CERTIFICATIONS;
   const filteredTimeline = MISSION_TIMELINE;
-  const filteredPapers = ALL_PROJECTS.filter(p => p.category === "Publication").map(p => ({
+  const filteredPapers = ALL_PROJECTS.filter(p => p.resources?.publication).map(p => ({
     id: p.id,
     title: p.title,
     type: p.overview,
-    readUrl: p.publication!
+    readUrl: p.resources?.publication!
   }));
 
   const jumpLinks = [
@@ -232,7 +232,7 @@ export default function ExecCommandCenter({
 
           {/* RIGHT SCROLLING CONTENT */}
           <main className="flex-1 overflow-y-auto p-6 lg:p-12 scroll-smooth bg-transparent selection:bg-cyan-900/50">
-            <div className="max-w-3xl mx-auto space-y-24 pb-32">
+            <div className="max-w-3xl mx-auto space-y-12 pb-32">
               
               {/* 1. EXECUTIVE HEADER */}
               <ScanReveal id="exec-sec-overview" className="space-y-8 pt-2 relative">
@@ -277,9 +277,9 @@ export default function ExecCommandCenter({
                 </div>
                 
                 {/* EXECUTIVE SNAPSHOT (Telemetry) */}
-                <div className="pt-8 border-t border-cyan-900/30">
+                <div className="pt-4 border-t border-cyan-900/30">
                   <h3 className="text-[10px] font-bold text-cyan-600 uppercase tracking-widest mb-4">Telemetry At A Glance</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                     {[
                       { label: "Product Requirement Documents", value: LIVE_METRICS_DASHBOARD.prds },
                       { label: "Product Case Studies", value: LIVE_METRICS_DASHBOARD.caseStudies },
@@ -300,13 +300,13 @@ export default function ExecCommandCenter({
               </ScanReveal>
 
               {/* 2. FEATURED PRODUCTS */}
-              <ScanReveal id="exec-sec-featured-products" className="space-y-6 pt-8 border-t border-cyan-900/30 relative">
+              <ScanReveal id="exec-sec-featured-products" className="space-y-6 pt-4 border-t border-cyan-900/30 relative">
                 {/* Section Connector */}
                 <div className="absolute -left-6 top-10 bottom-0 w-[1px] bg-cyan-900/30 hidden md:block"></div>
                 <div className="absolute -left-[27px] top-11 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)] hidden md:block"></div>
 
-                <h2 className="text-xl font-bold tracking-tight text-white mb-6">Featured Products</h2>
-                <div className="space-y-8">
+                <h2 className="text-xl font-bold tracking-tight text-white mb-4">Featured Products</h2>
+                <div className="space-y-6">
                   {filteredProjects.map((project) => {
                     // Extract details dynamically from single source of truth ALL_PROJECTS
                     const projData = ALL_PROJECTS.find(p => p.id === project.id);
@@ -318,15 +318,15 @@ export default function ExecCommandCenter({
                       <div key={project.id} className="group bg-slate-900/20 border border-cyan-900/30 rounded-xl p-0 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:border-cyan-500/50 hover:bg-slate-900/40 transition-all duration-300 backdrop-blur-sm overflow-hidden interactive-card">
                         
                         {/* Header */}
-                        <div className="border-b border-cyan-900/30 px-6 py-4 flex justify-between items-center bg-slate-900/30">
+                        <div className="border-b border-cyan-900/30 px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-900/30">
                           <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">{project.topic}</h3>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 shrink-0">
                             <span className="text-[10px] font-bold text-cyan-400 bg-cyan-900/30 px-2 py-1 rounded border border-cyan-800/50 uppercase tracking-widest">AI Product</span>
                           </div>
                         </div>
 
                         {/* Body Grid */}
-                        <div className="px-6 py-6 grid md:grid-cols-2 gap-6">
+                        <div className="px-6 py-4 grid md:grid-cols-2 gap-4">
                           <div>
                             <h4 className="text-[10px] font-bold text-cyan-600 uppercase tracking-widest mb-1">Problem</h4>
                             <p className="text-sm text-slate-300">{project.overview}</p>
@@ -346,15 +346,29 @@ export default function ExecCommandCenter({
                         </div>
 
                         {/* Footer Actions */}
-                        <div className="border-t border-cyan-900/30 px-6 py-4 flex flex-wrap gap-3 bg-slate-900/30">
-                          {project.githubUrl && <ResourceLink href={project.githubUrl} className={buttonClass} icon={<Code size={14}/>}>GitHub</ResourceLink>}
-                          {project.liveDemoUrl && <ResourceLink href={project.liveDemoUrl} className={buttonClass} icon={<Globe size={14}/>}>Live Demo</ResourceLink>}
-                          {project.prdUrl && <ResourceLink href={project.prdUrl} className={primaryButtonClass} icon={<FileText size={14}/>}>PRD</ResourceLink>}
-                          {!project.githubUrl && !project.liveDemoUrl && !project.prdUrl && project.evidenceUrl && project.evidenceType !== "None" && (
-                            <ResourceLink href={project.evidenceUrl} className={primaryButtonClass} icon={project.evidenceType === "GitHub" ? <Code size={14}/> : <FileText size={14}/>}>
-                              Open {project.evidenceType}
-                            </ResourceLink>
-                          )}
+                        <div className="border-t border-cyan-900/30 px-6 py-4 grid gap-3 w-full bg-slate-900/30" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
+                          {projData?.resources && Object.entries(projData.resources).map(([key, url]) => {
+                            if (!url) return null;
+                            let label = "";
+                            let icon = <ExternalLink size={14}/>;
+                            let isPrimary = false;
+                            switch(key) {
+                              case 'liveDemo': label = "Live Demo"; icon = <Globe size={14}/>; isPrimary = true; break;
+                              case 'github': label = "GitHub Repo"; icon = <Code size={14}/>; break;
+                              case 'prd': label = "PRD"; icon = <FileText size={14}/>; isPrimary = true; break;
+                              case 'caseStudy': label = "Case Study"; icon = <Briefcase size={14}/>; break;
+                              case 'analytics': label = "Analytics"; icon = <BarChart2 size={14}/>; break;
+                              case 'research': label = "Research"; icon = <Eye size={14}/>; break;
+                              case 'publication': label = "Publication"; icon = <BookOpen size={14}/>; break;
+                              case 'documentation': label = "Documentation"; icon = <FileText size={14}/>; break;
+                              case 'demoVideo': label = "Demo Video"; icon = <Globe size={14}/>; break;
+                            }
+                            return (
+                              <ResourceLink key={key} href={url} className={isPrimary ? primaryButtonClass : buttonClass} icon={icon}>
+                                {label}
+                              </ResourceLink>
+                            );
+                          })}
                         </div>
                       </div>
                     );
@@ -369,7 +383,7 @@ export default function ExecCommandCenter({
                 <h2 className="text-xl font-bold tracking-tight text-white mb-6">Case Studies</h2>
                 <div className="space-y-4">
                   {filteredCaseStudies.map((cs) => (
-                    <div key={cs.id} className="bg-slate-900/20 border border-cyan-900/30 rounded-xl p-6 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:border-cyan-500/50 hover:bg-slate-900/40 transition-all duration-300 backdrop-blur-sm">
+                    <div key={cs.id} className="bg-slate-900/20 border border-cyan-900/30 rounded-xl p-4 sm:p-6 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:border-cyan-500/50 hover:bg-slate-900/40 transition-all duration-300 backdrop-blur-sm">
                       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                         <div className="flex-1">
                           <h3 className="text-base font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors">{cs.topic}</h3>
@@ -400,7 +414,7 @@ export default function ExecCommandCenter({
                 <div className="absolute -left-6 top-10 bottom-0 w-[1px] bg-cyan-900/30 hidden md:block"></div>
                 <div className="absolute -left-[27px] top-11 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)] hidden md:block"></div>
                 <h2 className="text-xl font-bold tracking-tight text-white mb-6">Product Requirement Documents</h2>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {filteredPRDs.map((prd) => (
                     <div key={prd.id} className="bg-slate-900/20 border border-cyan-900/30 rounded-xl p-5 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:border-cyan-500/50 hover:bg-slate-900/40 transition-all duration-300 flex flex-col backdrop-blur-sm group">
                       <div className="flex items-start justify-between mb-2">
