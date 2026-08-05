@@ -41,7 +41,7 @@ import MissionObjectivePanel from "./hud/MissionObjectivePanel";
 import MissionCompleteSequence from "./hud/MissionCompleteSequence";
 import AIScannerHUDControl from "./hud/AIScannerHUDControl";
 import ProgressiveGuide from "./hud/ProgressiveGuide";
-import CustomCursor from "./hud/CustomCursor";
+
 import InteractionHintToast from "./hud/InteractionHintToast";
 
 // Types & Audio
@@ -203,15 +203,16 @@ export default function PortfolioScene() {
   const markNodeVisited = useMissionStore(state => state.markNodeVisited);
   
   // Dual Operating System State Machine
-  const [operatingMode, setOperatingMode] = useState<OperatingMode>(() => {
-    if (typeof window !== "undefined") {
-      const hasVisited = localStorage.getItem("odyssey_has_visited");
-      if (hasVisited) {
-        return (localStorage.getItem("odyssey_last_mode") as OperatingMode) || "MISSION";
-      }
+  const [operatingMode, setOperatingMode] = useState<OperatingMode>("TRANSITIONING_TO_MISSION");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const hasVisited = localStorage.getItem("odyssey_has_visited");
+    if (hasVisited) {
+      setOperatingMode((localStorage.getItem("odyssey_last_mode") as OperatingMode) || "MISSION");
     }
-    return "TRANSITIONING_TO_MISSION";
-  });
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -223,6 +224,7 @@ export default function PortfolioScene() {
   }, [operatingMode]);
   const [execSearchQuery] = useState("");
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [showMobileTip, setShowMobileTip] = useState(true);
 
   // Modal selection states
   const [selectedStory, setSelectedStory] = useState<CuriosityStory | null>(null);
@@ -403,7 +405,7 @@ export default function PortfolioScene() {
   return (
     <div className="relative w-screen h-screen bg-black overflow-hidden select-none">
       {/* --- DOM HUD OVERLAYS (OUTSIDE WEBGL CANVAS) --- */}
-      <CustomCursor />
+
       <TelemetryHeader />
       
       <ExecFastTrackHUD 
@@ -439,17 +441,25 @@ export default function PortfolioScene() {
       <FinaleContactDock />
 
       {/* --- UNIVERSAL INTERACTIVE NODE MODAL (LAW 8 READ FOCUS) --- */}
-      <UniversalNodeModal 
-        node={selectedStory || selectedExperience || selectedProductThinking || selectedLab} 
-        onClose={handleCloseModals} 
-      />
+      <AnimatePresence>
+        {(selectedStory || selectedExperience || selectedProductThinking || selectedLab) && (
+          <UniversalNodeModal 
+            key="universal-node-modal"
+            node={selectedStory || selectedExperience || selectedProductThinking || selectedLab} 
+            onClose={handleCloseModals} 
+          />
+        )}
+      </AnimatePresence>
 
-      {selectedPRD && (
-        <PRDSpecTablet 
-          prd={selectedPRD} 
-          onClose={handleCloseModals} 
-        />
-      )}
+      <AnimatePresence>
+        {selectedPRD && (
+          <PRDSpecTablet 
+            key="prd-spec-tablet"
+            prd={selectedPRD} 
+            onClose={handleCloseModals} 
+          />
+        )}
+      </AnimatePresence>
 
       {/* First-Time Visit Onboarding */}
       <OnboardingOverlay />
@@ -521,10 +531,17 @@ export default function PortfolioScene() {
       </AnimatePresence>
 
       {/* Mobile Experience Banner */}
-      {!isExecutiveMode && (
+      {isMounted && !isExecutiveMode && showMobileTip && (
         <div className="fixed top-24 inset-x-0 z-[60] flex justify-center md:hidden pointer-events-none px-4">
-          <div className="bg-slate-900/90 backdrop-blur border border-cyan-500/30 text-cyan-400 text-[10px] font-mono tracking-widest px-4 py-2 rounded-full uppercase shadow-[0_0_15px_rgba(0,240,255,0.15)] text-center leading-relaxed">
-            For the best cinematic experience, enable Desktop site in your browser (Chrome menu → Desktop site)
+          <div className="pointer-events-auto bg-slate-900/70 backdrop-blur-md border border-cyan-500/30 text-cyan-200 text-[10px] font-mono px-3 py-2 rounded-lg flex items-center justify-between gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.5)] max-w-sm">
+            <span>For best experience → Enable Desktop site (Chrome menu)</span>
+            <button 
+              onClick={() => setShowMobileTip(false)}
+              className="text-cyan-500 hover:text-cyan-300 ml-1 px-1.5 py-1 rounded bg-slate-800/80 hover:bg-slate-700 active:scale-95 transition-all shrink-0 font-sans text-xs font-bold leading-none"
+              aria-label="Dismiss"
+            >
+              ✕
+            </button>
           </div>
         </div>
       )}

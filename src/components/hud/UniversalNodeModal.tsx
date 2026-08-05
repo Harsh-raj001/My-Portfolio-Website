@@ -52,18 +52,24 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
   };
 
   return (
-    <AnimatePresence>
-      <div 
-        role="dialog"
-        aria-modal="true"
-        aria-label={`${node.topic} details modal`}
-        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/85 backdrop-blur-2xl transition-all select-none"
-        style={{ 
-          transform: "translate3d(0, 0, 0)", 
-          willChange: "transform",
-          paddingBottom: "env(safe-area-inset-bottom, 0px)",
-        }}
-        onClick={onClose}
+    <motion.div 
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${node.topic} details modal`}
+      initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+      animate={{ opacity: 1, backdropFilter: "blur(24px)" }}
+      exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+      transition={{ duration: 0.4 }}
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/85 select-none"
+      onClick={onClose}
+    >
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.96, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 20 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        className="bg-slate-950 border-t sm:border border-slate-800 w-full sm:w-[90%] sm:max-w-4xl flex flex-col sm:flex-row sm:rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.8)] relative max-h-[90vh] sm:max-h-[85vh] overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
       >
         <motion.div 
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -243,12 +249,12 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
               return (
                 <div className="space-y-3">
                   <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block text-center">Verified Evidence</span>
-                  <div className="grid gap-3 w-full mx-auto" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))' }}>
+                  <div className="flex flex-wrap justify-center gap-3 w-full mx-auto">
                     {cards.map((card, idx) => (
                       <ResourceLink 
                         key={idx}
                         href={card.url}
-                        className="group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer border"
+                        className="group flex flex-col items-center justify-center text-center gap-2 w-[140px] px-3 py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer border"
                         style={{
                           backgroundColor: `${accentColor}10`,
                           borderColor: `${accentColor}30`,
@@ -257,16 +263,16 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
                         }}
                         icon={
                           <div 
-                            className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mb-1"
                             style={{ backgroundColor: `${accentColor}25`, color: accentColor }}
                           >
                             {getEvidenceIcon(card.type)}
                           </div>
                         }
                       >
-                        <div className="flex flex-col text-left">
-                          <span className="text-xs font-semibold text-white">{card.label}</span>
-                          <span className="text-[10px] font-mono text-slate-400 mt-0.5">{card.sublabel}</span>
+                        <div className="flex flex-col items-center w-full">
+                          <span className="text-xs font-semibold text-white whitespace-nowrap overflow-hidden text-ellipsis w-full px-1">{card.label}</span>
+                          <span className="text-[9px] font-mono text-slate-400 mt-0.5">{card.sublabel}</span>
                         </div>
                       </ResourceLink>
                     ))}
@@ -281,7 +287,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
                   audioEngine.playHoverPing();
                   onClose();
                 }}
-                className="hover:text-white transition-colors uppercase tracking-wider cursor-pointer font-semibold text-xs whitespace-nowrap"
+                className="hover:text-white transition-all duration-200 uppercase tracking-wider cursor-pointer font-semibold text-xs whitespace-nowrap active:scale-[0.95]"
                 style={{ color: accentColor }}
               >
                 Resume Flight →
@@ -289,7 +295,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
             </div>
           </div>
         </motion.div>
-      </div>
-    </AnimatePresence>
+      </motion.div>
+    </motion.div>
   );
 }

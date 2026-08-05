@@ -33,17 +33,20 @@ export default function PRDSpecTablet({ prd, onClose }: PRDSpecTabletProps) {
   if (!prd) return null;
 
   return (
-    <AnimatePresence>
-      <div 
-        role="dialog"
-        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-2xl transition-all select-none"
-        onClick={onClose}
-      >
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.94, y: 35 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.94, y: 35 }}
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+    <motion.div 
+      role="dialog"
+      initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+      animate={{ opacity: 1, backdropFilter: "blur(24px)" }}
+      exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+      transition={{ duration: 0.4 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 select-none"
+      onClick={onClose}
+    >
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.96, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 20 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           className="bg-slate-950 border border-cyan-500/30 w-[94%] max-w-4xl flex flex-col rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.9)] relative text-slate-100 overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
@@ -97,7 +100,6 @@ export default function PRDSpecTablet({ prd, onClose }: PRDSpecTabletProps) {
             </div>
           </div>
         </motion.div>
-      </div>
-    </AnimatePresence>
+    </motion.div>
   );
 }

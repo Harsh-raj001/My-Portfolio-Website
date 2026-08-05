@@ -138,8 +138,8 @@ export default function ExecCommandCenter({
     return groups;
   }, [filteredCerts]);
 
-  const buttonClass = "flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-semibold bg-slate-900/50 border border-slate-700/50 text-slate-300 hover:text-cyan-400 hover:bg-slate-800 hover:border-cyan-900/50 rounded-md transition-colors backdrop-blur-sm interactive-card";
-  const primaryButtonClass = "flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-semibold bg-cyan-950/30 border border-cyan-800/50 text-cyan-400 hover:bg-cyan-900/50 hover:text-cyan-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.2)] rounded-md transition-all backdrop-blur-sm interactive-card";
+  const buttonClass = "flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-semibold bg-slate-900/50 border border-slate-700/50 text-slate-300 hover:text-cyan-400 hover:bg-slate-800 hover:border-cyan-900/50 rounded-md transition-colors backdrop-blur-sm interactive-card w-[140px] active:scale-[0.98]";
+  const primaryButtonClass = "flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-semibold bg-cyan-950/30 border border-cyan-800/50 text-cyan-400 hover:bg-cyan-900/50 hover:text-cyan-300 hover:shadow-[0_0_15px_rgba(56,189,248,0.2)] rounded-md transition-all backdrop-blur-sm interactive-card w-[140px] active:scale-[0.98]";
 
   return (
     <>
@@ -346,7 +346,7 @@ export default function ExecCommandCenter({
                         </div>
 
                         {/* Footer Actions */}
-                        <div className="border-t border-cyan-900/30 px-6 py-4 grid gap-3 w-full bg-slate-900/30" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
+                        <div className="border-t border-cyan-900/30 px-6 py-5 flex flex-wrap justify-center gap-4 w-full bg-slate-900/30">
                           {projData?.resources && Object.entries(projData.resources).map(([key, url]) => {
                             if (!url) return null;
                             let label = "";

@@ -18,86 +18,37 @@ interface ExecBootSequenceProps {
 }
 
 export default function ExecBootSequence({ onComplete }: ExecBootSequenceProps) {
-  const [lines, setLines] = useState<string[]>([]);
-
   useEffect(() => {
-    // Play system boot sound
+    // Play system boot sound immediately
     audioEngine.playHoverPing();
     
-    const handleSkip = () => {
-      audioEngine.playModalOpen(); // play a confirm sound
+    // Lightning fast transition (400ms)
+    const timeout = setTimeout(() => {
       onComplete();
-    };
-    window.addEventListener("keydown", handleSkip);
+    }, 400);
 
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      if (currentIndex < BOOT_SEQUENCE.length) {
-        setLines((prev) => [...prev, BOOT_SEQUENCE[currentIndex]]);
-        currentIndex++;
-        if (currentIndex < BOOT_SEQUENCE.length) {
-          audioEngine.playHoverPing(); // sound for each line
-        }
-      } else {
-        clearInterval(interval);
-        setTimeout(() => {
-          onComplete();
-        }, 300); // Wait a bit after showing "EXEC MODE ONLINE"
-      }
-    }, 150); // 150ms per line
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("keydown", handleSkip);
-    };
+    return () => clearTimeout(timeout);
   }, [onComplete]);
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black cursor-pointer"
-      onClick={() => {
-        audioEngine.playModalOpen();
-        onComplete();
-      }}
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.02 }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} // Premium custom cubic-bezier
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black"
     >
-      <div className="w-full max-w-2xl px-8">
-        <div className="font-mono text-sm tracking-widest text-slate-400">
-          <AnimatePresence>
-            {lines.map((line, index) => {
-              const isLast = index === BOOT_SEQUENCE.length - 1;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className={`py-1.5 ${isLast ? 'text-cyan-400 font-bold mt-4' : 'text-slate-400'}`}
-                >
-                  <span className="text-slate-600 mr-4">{`[SYS.${String(index + 1).padStart(2, '0')}]`}</span>
-                  {line}
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-          {lines.length < BOOT_SEQUENCE.length && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ repeat: Infinity, duration: 0.5, repeatType: "reverse" }}
-              className="inline-block w-2 h-4 bg-cyan-500 mt-2 ml-[3.5rem]"
-            />
-          )}
-          
-          {/* Skip Hint */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            transition={{ delay: 0.5 }}
-            className="absolute bottom-8 right-8 text-[10px] text-cyan-500 uppercase tracking-widest"
-          >
-            [Press any key or tap to skip]
-          </motion.div>
-        </div>
+      <div className="flex flex-col items-center">
+        <div className="w-12 h-12 border-t-2 border-r-2 border-cyan-400 rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div>
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.3 }}
+          className="mt-6 text-xs font-mono text-cyan-400 tracking-[0.2em] uppercase"
+        >
+          INITIALIZING EXECUTIVE MODE
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
