@@ -89,7 +89,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
           {/* Header (Sticky) */}
           <div className="shrink-0 p-4 sm:p-8 pb-3 sm:pb-4 border-b border-white/10 flex items-start justify-between gap-3 bg-slate-900/95 z-10 relative">
             <div className="min-w-0">
-              <span className="font-mono text-[10px] sm:text-xs tracking-widest uppercase block mb-1" style={{ color: accentColor }}>
+              <span className="font-mono text-xs sm:text-xs tracking-widest uppercase block mb-1" style={{ color: accentColor }}>
                 [{node.category}]
               </span>
               <h3 className="font-light text-xl sm:text-3xl text-white tracking-tight font-sans truncate">
@@ -248,7 +248,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
 
               return (
                 <div className="space-y-3">
-                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block text-center">Verified Evidence</span>
+                  <span className="text-xs font-mono text-slate-500 uppercase tracking-widest block text-center">Verified Evidence</span>
                   <div className="flex flex-wrap justify-center gap-3 w-full mx-auto">
                     {cards.map((card, idx) => (
                       <ResourceLink 
@@ -272,7 +272,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
                       >
                         <div className="flex flex-col items-center w-full">
                           <span className="text-xs font-semibold text-white whitespace-nowrap overflow-hidden text-ellipsis w-full px-1">{card.label}</span>
-                          <span className="text-[9px] font-mono text-slate-400 mt-0.5">{card.sublabel}</span>
+                          <span className="text-xs font-mono text-slate-400 mt-0.5">{card.sublabel}</span>
                         </div>
                       </ResourceLink>
                     ))}

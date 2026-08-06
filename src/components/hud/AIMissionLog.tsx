@@ -134,12 +134,12 @@ export default function AURAObserver({
               <span className={`absolute inset-0.5 rounded-full border border-dashed animate-spin ${isExec ? "border-amber-300/60" : "border-cyan-300/40"}`} style={{ animationDuration: "2.5s", animationDirection: "reverse" }} />
               <span className={`w-1.5 h-1.5 rounded-full ${isExec ? "bg-amber-400 shadow-[0_0_8px_#F59E0B]" : "bg-cyan-400 shadow-[0_0_6px_#00F0FF]"}`} />
             </div>
-            <span className={`font-bold uppercase tracking-wider text-[10px] ${isExec ? "text-amber-400" : "text-cyan-300"}`}>
+            <span className={`font-bold uppercase tracking-wider text-xs ${isExec ? "text-amber-400" : "text-cyan-300"}`}>
               {isExec ? "A.U.R.A. // EXEC ANALYST" : "A.U.R.A. // TELEMETRY"}
             </span>
           </div>
           {currentLog && (
-            <span className={`px-2 py-0.5 rounded border text-[9px] font-mono font-bold tracking-widest uppercase ${getBadgeColor(currentLog.category)}`}>
+            <span className={`px-2 py-0.5 rounded border text-xs font-mono font-bold tracking-widest uppercase ${getBadgeColor(currentLog.category)}`}>
               [{currentLog.category}]
             </span>
           )}
@@ -156,7 +156,7 @@ export default function AURAObserver({
         </p>
 
         {/* Footer Prompt */}
-        <div className="mt-3 pt-2 border-t border-white/5 text-[9px] font-mono text-slate-400 flex items-center justify-between tracking-widest uppercase">
+        <div className="mt-3 pt-2 border-t border-white/5 text-xs font-mono text-slate-400 flex items-center justify-between tracking-widest uppercase">
           <span className="flex items-center gap-1">
             <span className={`w-1.5 h-1.5 rounded-full ${isExec ? "bg-amber-400 animate-ping" : "bg-emerald-400"}`} />
             <span>{isExec ? "RECRUITER BYPASS ACTIVE" : "LIVE TELEMETRY STREAM"}</span>
@@ -174,8 +174,8 @@ export default function AURAObserver({
           return (
             <div className="mt-2 pt-2 border-t border-white/5">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest">Confidence Index</span>
-                <span className="text-[10px] font-mono font-bold text-cyan-400">{confidence}%</span>
+                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">Confidence Index</span>
+                <span className="text-xs font-mono font-bold text-cyan-400">{confidence}%</span>
               </div>
               <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
                 <div 

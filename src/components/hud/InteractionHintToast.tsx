@@ -59,7 +59,7 @@ export default function InteractionHintToast() {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
             </div>
             <div className="flex-1">
-              <h4 className="text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400 mb-1">Interaction Hint</h4>
+              <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-400 mb-1">Interaction Hint</h4>
               <p className="text-xs text-slate-300 leading-relaxed font-sans">Objects emitting a cyan pulse contain mission data. Click to inspect.</p>
             </div>
             <button 

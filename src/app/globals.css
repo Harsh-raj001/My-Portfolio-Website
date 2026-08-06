@@ -19,6 +19,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
@@ -113,4 +114,21 @@ canvas ~ div[style*="overflow: auto"],
 canvas ~ div[style*="overflow: scroll"] {
   pointer-events: auto !important;
   touch-action: pan-y !important;
+}
+
+/* Typography Scaling for Mobile Readability */
+.hud-text-primary {
+  font-size: 14px;
+}
+.hud-text-secondary {
+  font-size: 12px;
+}
+
+@media (min-width: 768px) {
+  .hud-text-primary {
+    font-size: 12px;
+  }
+  .hud-text-secondary {
+    font-size: 10px;
+  }
 }

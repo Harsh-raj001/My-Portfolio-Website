@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useMemo } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
+import { useOptimizedFrame } from "../lib/frameOptimization";
 import { useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { easing } from "maath";
@@ -14,7 +15,7 @@ export default function CameraRig() {
   const cameraPos = useMemo(() => new THREE.Vector3(0, 2, 15), []);
   const prevFov = useRef(45); // Track FOV to avoid unnecessary matrix updates
 
-  useFrame((state, delta) => {
+  useOptimizedFrame((state, delta) => {
     const progress = scroll.offset; // 0.0 to 1.0
     const elapsed = state.clock.elapsedTime;
 

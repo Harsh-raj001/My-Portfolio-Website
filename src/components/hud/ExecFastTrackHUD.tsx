@@ -102,7 +102,7 @@ export default function ExecFastTrackHUD({
           title="Open Universal Command Palette (Ctrl+K / ⌘+K)"
         >
           <span>🔍 SEARCH</span>
-          <span className="bg-white/10 px-1.5 py-0.5 rounded text-[9px] text-slate-400">⌘K / /</span>
+          <span className="bg-white/10 px-1.5 py-0.5 rounded text-xs text-slate-400">⌘K / /</span>
         </button>
 
         {/* 🚀 DUAL OPERATING SYSTEM SWITCHER (MISSION MODE vs EXEC MODE) */}
@@ -128,7 +128,7 @@ export default function ExecFastTrackHUD({
           </button>
         ) : (
           <div className="flex flex-col bg-slate-950/90 backdrop-blur-xl p-3 rounded-xl border border-slate-800 shadow-[0_0_25px_rgba(245,158,11,0.15)] min-w-[180px]">
-            <span className="text-[10px] font-extrabold uppercase text-slate-500 tracking-widest mb-2 border-b border-slate-800 pb-1">MISSION MODE</span>
+            <span className="text-xs font-extrabold uppercase text-slate-500 tracking-widest mb-2 border-b border-slate-800 pb-1">MISSION MODE</span>
             
             <button
               onClick={() => {
@@ -167,7 +167,7 @@ export default function ExecFastTrackHUD({
         {/* 1-Click Sector Teleportation Pills (Only displayed in Mission Mode) */}
         {!isExecutiveMode && (
           <div className="hidden xl:flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-cyan-500/30 shadow-[0_0_20px_rgba(0,240,255,0.15)] animate-fadeIn">
-            <span className="text-cyan-400/60 font-bold uppercase tracking-widest text-[10px] mr-1">
+            <span className="text-cyan-400/60 font-bold uppercase tracking-widest text-xs mr-1">
               [FAST-TRACK]:
             </span>
             {teleports.map((item, idx) => (

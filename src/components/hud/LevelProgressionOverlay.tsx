@@ -85,7 +85,7 @@ export default function LevelProgressionOverlay() {
           paddingRight: "env(safe-area-inset-right, 0px)",
         }}
       >
-        <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest flex items-center gap-2">
+        <div className="text-xs font-mono text-slate-500 uppercase tracking-widest flex items-center gap-2">
           <span>Evolution</span>
           <span className="text-cyan-400">{completionPercentage}%</span>
         </div>
@@ -139,7 +139,7 @@ export default function LevelProgressionOverlay() {
               </div>
 
               <div className="space-y-3 mt-8">
-                <h3 className="text-[10px] font-mono text-slate-500 tracking-widest uppercase mb-4">Key Takeaways</h3>
+                <h3 className="text-xs font-mono text-slate-500 tracking-widest uppercase mb-4">Key Takeaways</h3>
                 {activeLevel.takeaways.map((takeaway, i) => (
                   <motion.div 
                     initial={{ opacity: 0, x: -10 }}

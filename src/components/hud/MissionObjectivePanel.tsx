@@ -50,7 +50,7 @@ export default function MissionObjectivePanel() {
     >
       
       {/* Breadcrumbs */}
-      <div className="flex items-center gap-1 text-[10px] font-mono text-cyan-600/70 uppercase tracking-widest mb-3 flex-wrap">
+      <div className="flex items-center gap-1 text-xs font-mono text-cyan-600/70 uppercase tracking-widest mb-3 flex-wrap">
         {breadcrumbs.map((crumb, idx) => (
           <React.Fragment key={idx}>
             <span className={idx === breadcrumbs.length - 1 ? "text-cyan-400 font-bold" : ""}>
@@ -76,11 +76,11 @@ export default function MissionObjectivePanel() {
           
           <div className="relative z-10">
             <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
-              <h3 className="text-[9px] sm:text-[10px] font-bold text-cyan-500 uppercase tracking-[0.2em] flex items-center gap-1.5">
+              <h3 className="text-xs sm:text-xs font-bold text-cyan-500 uppercase tracking-[0.2em] flex items-center gap-1.5">
                 <Target size={10} className={showWarning ? "text-amber-400" : ""} />
                 Objective
               </h3>
-              <span className={`px-1.5 py-0.5 rounded border text-[8px] sm:text-[9px] font-mono uppercase tracking-widest ${
+              <span className={`px-1.5 py-0.5 rounded border text-xs sm:text-xs font-mono uppercase tracking-widest ${
                 showWarning 
                   ? "border-amber-900/50 text-amber-400 bg-amber-950/30" 
                   : "border-cyan-900/50 text-cyan-400 bg-cyan-950/30"

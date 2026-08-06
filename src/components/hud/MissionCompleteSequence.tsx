@@ -83,7 +83,7 @@ export default function MissionCompleteSequence({ onEnterExecMode, onReExplore }
                 <p className="text-xs font-mono text-cyan-400 uppercase tracking-[0.3em] animate-pulse">
                   Generating Candidate Profile...
                 </p>
-                <p className="text-[10px] font-mono text-slate-500 tracking-widest">
+                <p className="text-xs font-mono text-slate-500 tracking-widest">
                   A.U.R.A. COMPILING MISSION TELEMETRY
                 </p>
               </div>
@@ -123,7 +123,7 @@ export default function MissionCompleteSequence({ onEnterExecMode, onReExplore }
                   >
                     <div className="text-cyan-400 flex justify-center mb-2">{stat.icon}</div>
                     <div className="text-2xl font-bold text-white">{stat.value}</div>
-                    <div className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mt-1">{stat.label}</div>
+                    <div className="text-xs font-mono text-slate-400 uppercase tracking-widest mt-1">{stat.label}</div>
                   </motion.div>
                 ))}
               </div>
@@ -177,7 +177,7 @@ export default function MissionCompleteSequence({ onEnterExecMode, onReExplore }
                       <Download size={18} />
                       <div className="text-left">
                         <span className="text-sm font-semibold text-white block">Open Executive Dashboard</span>
-                        <span className="text-[10px] font-mono text-slate-400">Resume, PRDs, Case Studies, Contact</span>
+                        <span className="text-xs font-mono text-slate-400">Resume, PRDs, Case Studies, Contact</span>
                       </div>
                     </div>
                     <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />

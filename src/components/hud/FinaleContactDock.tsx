@@ -39,11 +39,11 @@ export default function CommandDashboard() {
           <div className="flex flex-col items-start gap-2 bg-emerald-950/80 border border-emerald-500/40 px-4 py-2.5 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.25)]">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping shadow-[0_0_8px_#10B981]" />
-              <span className="text-emerald-300 font-mono text-[10px] font-bold tracking-widest uppercase">
+              <span className="text-emerald-300 font-mono text-xs font-bold tracking-widest uppercase">
                 Currently Seeking Opportunities As:
               </span>
             </div>
-            <div className="flex gap-2 text-emerald-400/90 font-mono text-[10px] uppercase font-semibold">
+            <div className="flex gap-2 text-emerald-400/90 font-mono text-xs uppercase font-semibold">
               <span>• Product Manager</span>
               <span>• APM</span>
               <span>• Product Analyst</span>
@@ -63,7 +63,7 @@ export default function CommandDashboard() {
               <span className="font-mono text-[22px] sm:text-2xl font-bold text-cyan-400 tracking-tight group-hover:scale-105 transition-transform">
                 {kpi.value}
               </span>
-              <span className="font-mono text-[10px] font-semibold text-slate-300 tracking-widest uppercase mt-0.5">
+              <span className="font-mono text-xs font-semibold text-slate-300 tracking-widest uppercase mt-0.5">
                 {kpi.label}
               </span>
               <span className="font-sans text-[11px] text-slate-400 mt-0.5">
@@ -139,7 +139,7 @@ export default function CommandDashboard() {
         </div>
       </motion.div>
 
-      <div className="mt-2 font-mono text-[10px] text-slate-500 text-center tracking-widest hidden sm:block">
+      <div className="mt-2 font-mono text-xs text-slate-500 text-center tracking-widest hidden sm:block">
         &copy; {new Date().getFullYear()} {EXPLORER_NAME} {"// PRODUCT THINKER & ARCHITECT // ALL SYSTEMS OPERATIONAL"}
       </div>
     </div>

@@ -268,14 +268,14 @@ export default function CommandPalette({
                           <span className="text-sm font-bold truncate">
                             {item.title}
                           </span>
-                          <span className={`text-[10px] truncate ${isSelected ? "text-slate-300" : "text-slate-500"}`}>
+                          <span className={`text-xs truncate ${isSelected ? "text-slate-300" : "text-slate-500"}`}>
                             {item.subtitle}
                           </span>
                         </div>
                       </div>
                       
                       <div className="shrink-0 flex items-center gap-3">
-                        <span className={`text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider ${
+                        <span className={`text-xs font-bold px-2 py-1 rounded uppercase tracking-wider ${
                           isSelected ? "bg-white/20 text-white" : "bg-slate-200 text-slate-600"
                         }`}>
                           {item.category}
@@ -289,7 +289,7 @@ export default function CommandPalette({
             </div>
 
             {/* Footer */}
-            <div className="border-t border-slate-200 px-4 py-2 bg-slate-50 flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <div className="border-t border-slate-200 px-4 py-2 bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-widest">
               <span>Universal Search</span>
               <span>{filteredItems.length} Results</span>
             </div>

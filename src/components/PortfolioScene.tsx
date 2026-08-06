@@ -43,6 +43,7 @@ import AIScannerHUDControl from "./hud/AIScannerHUDControl";
 import ProgressiveGuide from "./hud/ProgressiveGuide";
 
 import InteractionHintToast from "./hud/InteractionHintToast";
+import MobileNavMenu from "./hud/MobileNavMenu";
 
 // Types & Audio
 import { CuriosityStory, ExperienceNode, ProductThinkingNode, PortfolioProject, PRDVaultItem } from "../types/mission";
@@ -61,9 +62,9 @@ function LoaderFallback() {
           <div className="absolute inset-0 rounded-full bg-cyan-400/20 animate-ping" />
           <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
         </div>
-        <div className="mt-4 text-[10px] font-mono text-cyan-500 uppercase tracking-widest text-center whitespace-nowrap drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]">
+        <div className="mt-4 text-xs font-mono text-cyan-500 uppercase tracking-widest text-center whitespace-nowrap drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]">
           Live Telemetry Stream<br/>
-          <span className="text-slate-400 text-[8px] animate-pulse">Establishing Connection...</span>
+          <span className="text-slate-400 text-xs animate-pulse">Establishing Connection...</span>
         </div>
       </div>
     </Html>
@@ -224,7 +225,7 @@ export default function PortfolioScene() {
   }, [operatingMode]);
   const [execSearchQuery] = useState("");
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-  const [showMobileTip, setShowMobileTip] = useState(true);
+
 
   // Modal selection states
   const [selectedStory, setSelectedStory] = useState<CuriosityStory | null>(null);
@@ -406,6 +407,7 @@ export default function PortfolioScene() {
     <div className="relative w-screen h-screen bg-black overflow-hidden select-none">
       {/* --- DOM HUD OVERLAYS (OUTSIDE WEBGL CANVAS) --- */}
 
+      <MobileNavMenu />
       <TelemetryHeader />
       
       <ExecFastTrackHUD 
@@ -530,37 +532,26 @@ export default function PortfolioScene() {
         )}
       </AnimatePresence>
 
-      {/* Mobile Experience Banner */}
-      {isMounted && !isExecutiveMode && showMobileTip && (
-        <div className="fixed top-24 inset-x-0 z-[60] flex justify-center md:hidden pointer-events-none px-4">
-          <div className="pointer-events-auto bg-slate-900/70 backdrop-blur-md border border-cyan-500/30 text-cyan-200 text-[10px] font-mono px-3 py-2 rounded-lg flex items-center justify-between gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.5)] max-w-sm">
-            <span>For best experience → Enable Desktop site (Chrome menu)</span>
-            <button 
-              onClick={() => setShowMobileTip(false)}
-              className="text-cyan-500 hover:text-cyan-300 ml-1 px-1.5 py-1 rounded bg-slate-800/80 hover:bg-slate-700 active:scale-95 transition-all shrink-0 font-sans text-xs font-bold leading-none"
-              aria-label="Dismiss"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+
 
       {/* --- 3D CINEMATIC WEBGL CANVAS --- */}
       <Canvas
-        style={{ touchAction: "none" }}
         camera={{ position: [0, 2, 15], fov: 45, near: 0.1, far: 800 }}
         gl={{ 
-          antialias: true, 
+          antialias: qualitySettings.antialias, 
           powerPreference: "high-performance",
           stencil: false,
           depth: true,
+          logarithmicDepthBuffer: qualitySettings.tier === "LOW",
         }}
-        dpr={[1, 1.5]}
+        dpr={qualitySettings.dpr}
         frameloop={isModalOpen ? "never" : "always"}
       >
         <Suspense fallback={<LoaderFallback />}>
-          <ScrollControls pages={16} damping={isTeleporting ? 0 : 0.25}>
+          <ScrollControls 
+            pages={16} 
+            damping={isTeleporting ? 0 : (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1 ? 0.08 : 0.25)}
+          >
             <ScrollTracker />
             <ScrollTeleporter targetProgress={teleportTarget} onComplete={() => setTeleportTarget(null)} />
 
