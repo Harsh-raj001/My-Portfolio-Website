@@ -536,7 +536,7 @@ export default function PortfolioScene() {
 
       {/* --- 3D CINEMATIC WEBGL CANVAS --- */}
       <Canvas
-        style={{ touchAction: "auto" }}
+        style={{ touchAction: "none" }}
         camera={{ position: [0, 2, 15], fov: 45, near: 0.1, far: 800 }}
         gl={{ 
           antialias: qualitySettings.antialias, 

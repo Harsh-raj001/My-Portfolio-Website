@@ -132,3 +132,15 @@ canvas ~ div[style*="overflow: scroll"] {
     font-size: 10px;
   }
 }
+
+@media (max-width: 767px) {
+  /* Disable non-interactive HUD elements on mobile */
+  .hud-text-primary,
+  .hud-text-secondary,
+  .hud-label,
+  [class*="Telemetry"],
+  [class*="MissionObjective"],
+  [class*="LevelProgression"] {
+    pointer-events: none !important;
+  }
+}
