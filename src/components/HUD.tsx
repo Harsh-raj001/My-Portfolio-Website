@@ -9,48 +9,118 @@ import { EXPLORER_NAME, MISSION_OBJECTIVE } from "../data/missionData";
 // Section positions content at `offset * 100vh` inside the Drei ScrollControls HTML layer.
 // Animation fires immediately on mount (not IntersectionObserver) so appearance is
 // frame-aligned with the ScrollControls timeline, not async DOM observation.
+interface SectionProps {
+  children: React.ReactNode;
+  offset: number;
+  position?: "left" | "right" | "center";
+}
+
 const Section = ({ 
   children, 
   offset, 
-  style 
-}: { 
-  children: React.ReactNode; 
-  offset: number; 
-  style?: React.CSSProperties; 
-}) => {
+  position = "left" 
+}: SectionProps) => {
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     setMobile(isMobile);
   }, []);
 
-  const sectionStyle = mobile ? {
-    position: "absolute" as const,
+  // Outer container is a full-height viewport block placed at offset * 100vh
+  const outerStyle: React.CSSProperties = {
+    position: "absolute",
     top: `${offset * 100}vh`,
     width: "100%",
     height: "100vh",
-    display: "flex",
-    flexDirection: "column" as const,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    textAlign: "left" as const,
-    paddingLeft: "10vw",
-    paddingRight: "10vw",
-    pointerEvents: "none" as const,
-  } : {
-    position: "absolute" as const,
-    top: `${offset * 100}vh`,
-    width: "100%",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column" as const,
-    justifyContent: "center",
-    padding: "0 8vw",
-    pointerEvents: "none" as const,
-    ...style
+    pointerEvents: "none",
+  };
+
+  // Determine styles for the inner narrative container based on rail positioning
+  const getContainerStyle = (): React.CSSProperties => {
+    if (mobile) {
+      switch (position) {
+        case "right":
+          return {
+            position: "absolute",
+            top: "50%",
+            left: "14vw",
+            transform: "translateY(-50%)",
+            width: "78vw",
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          };
+        case "center":
+          return {
+            position: "absolute",
+            top: "50%",
+            left: "10vw",
+            transform: "translateY(-50%)",
+            width: "80vw",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          };
+        case "left":
+        default:
+          return {
+            position: "absolute",
+            top: "50%",
+            left: "8vw",
+            transform: "translateY(-50%)",
+            width: "78vw",
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          };
+      }
+    } else {
+      switch (position) {
+        case "right":
+          return {
+            position: "absolute",
+            top: "50%",
+            left: "58vw",
+            transform: "translateY(-50%)",
+            width: "38vw",
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          };
+        case "center":
+          return {
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "45vw",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          };
+        case "left":
+        default:
+          return {
+            position: "absolute",
+            top: "50%",
+            left: "10vw",
+            transform: "translateY(-50%)",
+            width: "40vw",
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          };
+      }
+    }
   };
 
   return (
-    <section style={sectionStyle} className="box-border z-10">
+    <section style={outerStyle} className="box-border z-10">
       {/* 
         Mobile: pure opacity fade, 0.25s — no Y offset to avoid positional jitter.
         Desktop: opacity + subtle Y lift, 0.7s cinematic ease.
@@ -64,8 +134,8 @@ const Section = ({
           ease: [0.16, 1, 0.3, 1],
           delay: mobile ? 0 : 0.05,
         }}
-        className="pointer-events-none w-full max-w-[85vw] md:max-w-4xl"
-        style={mobile ? { width: "76vw", maxWidth: "76vw" } : undefined}
+        className="pointer-events-none"
+        style={getContainerStyle()}
       >
         {children}
       </motion.div>
@@ -79,8 +149,8 @@ export default function HUD() {
     <>
       <Scroll html style={{ width: "100%", height: "100%", pointerEvents: "none" }}>
         {/* 1. SCENE 01: INTRO & LAUNCH SEQUENCE (Page 0 - 1.2) */}
-        <Section offset={0}>
-          <div className="space-y-4 sm:space-y-6 select-none text-left">
+        <Section offset={0} position="left">
+          <div className="space-y-4 sm:space-y-6 select-none text-left w-full">
             <div className="inline-block bg-white/5 border border-white/10 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full font-mono text-[10px] sm:text-xs tracking-[0.15em] text-emerald-400 uppercase">
               MISSION STATUS // PREPARING LAUNCH
             </div>
@@ -103,15 +173,15 @@ export default function HUD() {
         </Section>
 
         {/* 2. SCENE 02: VERIDIAN PRIME // PLANET OF CURIOSITY (Page 2 - 4) */}
-        <Section offset={2} style={{ alignItems: "flex-end", textAlign: "right", paddingRight: "10vw" }}>
-          <div className="max-w-xl select-none text-left md:text-right">
+        <Section offset={2} position="left">
+          <div className="w-full select-none text-left">
             <span className="font-mono text-xs tracking-[0.15em] text-amber-400 uppercase block mb-2">
               CHAPTER ONE // UNDERGRADUATE FOUNDATIONS
             </span>
             <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
               Veridian <span className="text-amber-400 font-normal">Prime</span>
             </h2>
-            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl ml-0 md:ml-auto">
+            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl">
               Where empathy and inquiry take root. Before building products, one must understand human psychology, team resilience, and the art of listening to what isn&apos;t being said.
             </p>
             <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-amber-300 font-mono text-[11px] sm:text-xs text-left">
@@ -121,8 +191,8 @@ export default function HUD() {
         </Section>
 
         {/* 3. SCENE 03: THE KAOS STRAIT // ASTEROID SLALOM (Page 4.5 - 6.5) */}
-        <Section offset={4.5} style={{ alignItems: "flex-start", textAlign: "left", paddingLeft: "10vw" }}>
-          <div className="max-w-xl select-none text-left">
+        <Section offset={4.5} position="left">
+          <div className="w-full select-none text-left">
             <span className="font-mono text-xs tracking-[0.15em] text-rose-400 uppercase block mb-2">
               CHAPTER TWO // THE PHILOSOPHICAL GAUNTLET
             </span>
@@ -139,15 +209,15 @@ export default function HUD() {
         </Section>
 
         {/* 4. SCENE 04: SYNTHESIS-V // CYBERNETIC LEARNING BELT (Page 7 - 9.5) */}
-        <Section offset={7} style={{ alignItems: "flex-end", textAlign: "right", paddingRight: "10vw" }}>
-          <div className="max-w-xl select-none text-left md:text-right">
+        <Section offset={7} position="right">
+          <div className="w-full select-none text-left">
             <span className="font-mono text-xs tracking-[0.15em] text-cyan-400 uppercase block mb-2">
               CHAPTER THREE // KNOWLEDGE MONOLITHS
             </span>
             <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
               Synthesis-<span className="text-cyan-400 font-normal">V</span>
             </h2>
-            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl ml-0 md:ml-auto">
+            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl">
               Transforming raw knowledge into executive analytical frameworks. From machine learning and product analytics to unit economics and statistical rigor at scale.
             </p>
             <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-cyan-300 font-mono text-[11px] sm:text-xs">
@@ -157,8 +227,8 @@ export default function HUD() {
         </Section>
 
         {/* 5. SCENE 05: WORMHOLE WARP CONDUIT (Page 10) */}
-        <Section offset={10} style={{ alignItems: "center", textAlign: "center" }}>
-          <div className="max-w-2xl select-none text-left md:text-center">
+        <Section offset={10} position="center">
+          <div className="w-full select-none text-center">
             <span className="font-mono text-xs tracking-[0.15em] text-pink-400 uppercase block mb-2 sm:mb-3">
               MISSION LOG // WARP DRIVE ENGAGED
             </span>
@@ -173,8 +243,8 @@ export default function HUD() {
         </Section>
 
         {/* 6. SCENE 06: NEXUS-7 ORBITAL CITY // THE BUILDER STATION (Page 11.8 - 13.5) */}
-        <Section offset={11.8} style={{ alignItems: "flex-start", textAlign: "left", paddingLeft: "10vw" }}>
-          <div className="max-w-2xl select-none text-left">
+        <Section offset={11.8} position="left">
+          <div className="w-full select-none text-left">
             <span className="font-mono text-xs tracking-[0.15em] text-emerald-400 uppercase block mb-2">
               CHAPTER FOUR // FLAGSHIP PRODUCT LABS
             </span>
@@ -191,8 +261,8 @@ export default function HUD() {
         </Section>
 
         {/* 7. SCENE 07: COMMAND DOME // DYSON SPHERE MEGASTRUCTURE (Page 14.2) */}
-        <Section offset={14.2} style={{ alignItems: "center", textAlign: "center" }}>
-          <div className="max-w-3xl select-none bg-slate-950/80 backdrop-blur-2xl border border-white/15 p-5 sm:p-10 md:p-14 rounded-3xl shadow-2xl text-left md:text-center">
+        <Section offset={14.2} position="center">
+          <div className="w-full select-none bg-slate-950/80 backdrop-blur-2xl border border-white/15 p-5 sm:p-10 md:p-14 rounded-3xl shadow-2xl text-center">
             <span className="font-mono text-xs tracking-[0.15em] text-amber-400 uppercase block mb-2 sm:mb-4">
               MISSION CONTROL // STRATEGIC LIAISON
             </span>
