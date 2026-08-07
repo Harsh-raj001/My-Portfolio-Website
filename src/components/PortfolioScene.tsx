@@ -411,19 +411,23 @@ export default function PortfolioScene() {
       <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 z-40 md:block md:p-0 md:static overflow-hidden box-border">
         
         {/* TOP MOBILE HUD */}
-        <div className="flex flex-col gap-3 md:contents items-start">
-          <MobileNavMenu />
-          <TelemetryHeader />
-          <ExecFastTrackHUD 
-            onTeleport={(target) => setTeleportTarget(target)} 
-            onToggleAudio={handleToggleAudio} 
-            onToggleExecutiveMode={handleToggleExecutiveMode}
-            onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-            isAudioMuted={isMuted} 
-            isExecutiveMode={isExecutiveMode}
-          />
-          {!isExecutiveMode && <MissionObjectivePanel />}
+        <div className="flex flex-col gap-2.5 md:contents items-start w-full">
           {!isExecutiveMode && <LevelProgressionOverlay />}
+          
+          <div className="flex items-center justify-between w-full pointer-events-none md:contents gap-2">
+            <MobileNavMenu />
+            <ExecFastTrackHUD 
+              onTeleport={(target) => setTeleportTarget(target)} 
+              onToggleAudio={handleToggleAudio} 
+              onToggleExecutiveMode={handleToggleExecutiveMode}
+              onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+              isAudioMuted={isMuted} 
+              isExecutiveMode={isExecutiveMode}
+            />
+          </div>
+
+          <TelemetryHeader />
+          {!isExecutiveMode && <MissionObjectivePanel />}
         </div>
 
         {/* BOTTOM MOBILE HUD */}

@@ -23,22 +23,34 @@ const Section = ({
     setMobile(isMobile);
   }, []);
 
+  const sectionStyle = mobile ? {
+    position: "absolute" as const,
+    top: `${offset * 100}vh`,
+    width: "100%",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column" as const,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    textAlign: "left" as const,
+    paddingLeft: "10vw",
+    paddingRight: "10vw",
+    pointerEvents: "none" as const,
+  } : {
+    position: "absolute" as const,
+    top: `${offset * 100}vh`,
+    width: "100%",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column" as const,
+    justifyContent: "center",
+    padding: "0 8vw",
+    pointerEvents: "none" as const,
+    ...style
+  };
+
   return (
-    <section 
-      style={{
-        position: "absolute",
-        top: `${offset * 100}vh`,
-        width: "100%",
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "0 8vw",
-        pointerEvents: "none",
-        ...style
-      }}
-      className="box-border z-10"
-    >
+    <section style={sectionStyle} className="box-border z-10">
       {/* 
         Mobile: pure opacity fade, 0.25s — no Y offset to avoid positional jitter.
         Desktop: opacity + subtle Y lift, 0.7s cinematic ease.
@@ -53,6 +65,7 @@ const Section = ({
           delay: mobile ? 0 : 0.05,
         }}
         className="pointer-events-none w-full max-w-[85vw] md:max-w-4xl"
+        style={mobile ? { width: "76vw", maxWidth: "76vw" } : undefined}
       >
         {children}
       </motion.div>
@@ -67,18 +80,18 @@ export default function HUD() {
       <Scroll html style={{ width: "100%", height: "100%", pointerEvents: "none" }}>
         {/* 1. SCENE 01: INTRO & LAUNCH SEQUENCE (Page 0 - 1.2) */}
         <Section offset={0}>
-          <div className="space-y-4 sm:space-y-6 select-none">
-            <div className="inline-block bg-white/5 border border-white/10 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full font-mono text-xs sm:text-xs tracking-widest text-emerald-400 uppercase">
+          <div className="space-y-4 sm:space-y-6 select-none text-left">
+            <div className="inline-block bg-white/5 border border-white/10 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full font-mono text-[10px] sm:text-xs tracking-[0.15em] text-emerald-400 uppercase">
               MISSION STATUS // PREPARING LAUNCH
             </div>
-            <h1 className="text-3xl sm:text-5xl md:text-8xl font-light tracking-tighter text-white leading-tight">
+            <h1 className="font-space text-[38px] sm:text-5xl md:text-8xl font-medium md:font-light tracking-tighter text-white leading-[0.98] md:leading-tight">
               Explorer: <span className="font-normal text-amber-400">{EXPLORER_NAME}</span>
             </h1>
-            <p className="text-sm sm:text-lg md:text-2xl text-slate-300 max-w-xl font-light tracking-wide leading-relaxed">
+            <p className="font-sans text-[15px] sm:text-lg md:text-2xl text-slate-300 max-w-[70vw] sm:max-w-xl font-light tracking-wide leading-relaxed">
               <strong className="text-white font-normal block mb-1 text-base sm:text-lg">Mission Objective:</strong>
               &ldquo;{MISSION_OBJECTIVE}&rdquo;
             </p>
-            <div className="pt-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 font-mono text-xs sm:text-sm text-slate-400">
+            <div className="pt-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 font-mono text-[10px] sm:text-sm text-slate-400">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-cyan-400 animate-ping" />
                 <span className="text-white uppercase tracking-wider font-semibold">[LAUNCH SEQUENCE READY]</span>
@@ -91,17 +104,17 @@ export default function HUD() {
 
         {/* 2. SCENE 02: VERIDIAN PRIME // PLANET OF CURIOSITY (Page 2 - 4) */}
         <Section offset={2} style={{ alignItems: "flex-end", textAlign: "right", paddingRight: "10vw" }}>
-          <div className="max-w-xl select-none">
-            <span className="font-mono text-xs sm:text-xs tracking-widest text-amber-400 uppercase block mb-2">
+          <div className="max-w-xl select-none text-left md:text-right">
+            <span className="font-mono text-xs tracking-[0.15em] text-amber-400 uppercase block mb-2">
               CHAPTER ONE // UNDERGRADUATE FOUNDATIONS
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-6xl text-white font-light tracking-tight mb-3">
+            <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
               Veridian <span className="text-amber-400 font-normal">Prime</span>
             </h2>
-            <p className="text-xs sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6">
+            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl ml-0 md:ml-auto">
               Where empathy and inquiry take root. Before building products, one must understand human psychology, team resilience, and the art of listening to what isn&apos;t being said.
             </p>
-            <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-amber-300 font-mono text-xs sm:text-xs text-left">
+            <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-amber-300 font-mono text-[11px] sm:text-xs text-left">
               <span>💡 INTERACTIVE: Click the 5 orbital beacons to explore stories.</span>
             </div>
           </div>
@@ -109,17 +122,17 @@ export default function HUD() {
 
         {/* 3. SCENE 03: THE KAOS STRAIT // ASTEROID SLALOM (Page 4.5 - 6.5) */}
         <Section offset={4.5} style={{ alignItems: "flex-start", textAlign: "left", paddingLeft: "10vw" }}>
-          <div className="max-w-xl select-none">
-            <span className="font-mono text-xs sm:text-xs tracking-widest text-rose-400 uppercase block mb-2">
+          <div className="max-w-xl select-none text-left">
+            <span className="font-mono text-xs tracking-[0.15em] text-rose-400 uppercase block mb-2">
               CHAPTER TWO // THE PHILOSOPHICAL GAUNTLET
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-6xl text-white font-light tracking-tight mb-3">
+            <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
               The Kaos <span className="text-rose-400 font-normal">Strait</span>
             </h2>
-            <p className="text-xs sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6">
+            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl">
               Navigating the inevitable ambiguity, scope creep, and executive friction of real-world product management. We do not attempt to destroy obstacles; we prioritize navigation around them.
             </p>
-            <div className="inline-flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-rose-300 font-mono text-xs sm:text-xs">
+            <div className="inline-flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-rose-300 font-mono text-[11px] sm:text-xs">
               <span>🚨 WARNING: Click the pulsing red warning asteroids to inspect logs.</span>
             </div>
           </div>
@@ -127,17 +140,17 @@ export default function HUD() {
 
         {/* 4. SCENE 04: SYNTHESIS-V // CYBERNETIC LEARNING BELT (Page 7 - 9.5) */}
         <Section offset={7} style={{ alignItems: "flex-end", textAlign: "right", paddingRight: "10vw" }}>
-          <div className="max-w-xl select-none">
-            <span className="font-mono text-xs sm:text-xs tracking-widest text-cyan-400 uppercase block mb-2">
+          <div className="max-w-xl select-none text-left md:text-right">
+            <span className="font-mono text-xs tracking-[0.15em] text-cyan-400 uppercase block mb-2">
               CHAPTER THREE // KNOWLEDGE MONOLITHS
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-6xl text-white font-light tracking-tight mb-3">
+            <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
               Synthesis-<span className="text-cyan-400 font-normal">V</span>
             </h2>
-            <p className="text-xs sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6">
+            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl ml-0 md:ml-auto">
               Transforming raw knowledge into executive analytical frameworks. From machine learning and product analytics to unit economics and statistical rigor at scale.
             </p>
-            <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-cyan-300 font-mono text-xs sm:text-xs">
+            <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-cyan-300 font-mono text-[11px] sm:text-xs">
               <span>🔬 ANALYTICS: Click any of the floating crystals to inspect telemetry.</span>
             </div>
           </div>
@@ -145,15 +158,15 @@ export default function HUD() {
 
         {/* 5. SCENE 05: WORMHOLE WARP CONDUIT (Page 10) */}
         <Section offset={10} style={{ alignItems: "center", textAlign: "center" }}>
-          <div className="max-w-2xl select-none">
-            <span className="font-mono text-xs sm:text-xs tracking-widest text-pink-400 uppercase block mb-2 sm:mb-3">
+          <div className="max-w-2xl select-none text-left md:text-center">
+            <span className="font-mono text-xs tracking-[0.15em] text-pink-400 uppercase block mb-2 sm:mb-3">
               MISSION LOG // WARP DRIVE ENGAGED
             </span>
-            <h2 className="text-xl sm:text-3xl md:text-5xl font-light text-white tracking-tight mb-3 sm:mb-4">
+            <h2 className="font-space text-[30px] sm:text-3xl md:text-5xl font-medium md:font-light text-white tracking-tight leading-[1.05] md:leading-tight mb-3 sm:mb-4">
               Learning creates <span className="text-cyan-400">possibility</span>.<br />
               Building creates <span className="text-emerald-400">impact</span>.
             </h2>
-            <p className="text-xs sm:text-sm font-mono text-slate-400 tracking-widest uppercase animate-pulse">
+            <p className="text-[10px] sm:text-sm font-mono text-slate-400 tracking-[0.15em] uppercase animate-pulse">
               [AUTO-MOMENTUM GLIDE ENGAGED: ACCELERATING INTO ORBITAL RESEARCH SECTOR]
             </p>
           </div>
@@ -161,17 +174,17 @@ export default function HUD() {
 
         {/* 6. SCENE 06: NEXUS-7 ORBITAL CITY // THE BUILDER STATION (Page 11.8 - 13.5) */}
         <Section offset={11.8} style={{ alignItems: "flex-start", textAlign: "left", paddingLeft: "10vw" }}>
-          <div className="max-w-2xl select-none">
-            <span className="font-mono text-xs sm:text-xs tracking-widest text-emerald-400 uppercase block mb-2">
+          <div className="max-w-2xl select-none text-left">
+            <span className="font-mono text-xs tracking-[0.15em] text-emerald-400 uppercase block mb-2">
               CHAPTER FOUR // FLAGSHIP PRODUCT LABS
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-6xl text-white font-light tracking-tight mb-3">
+            <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
               Nexus-7 <span className="text-emerald-400 font-normal">Station</span>
             </h2>
-            <p className="text-xs sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6">
+            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl">
               An orbital research station dedicated to solving complex human friction. Here lies the synthesis of user empathy, technical architecture, and ruthless trade-off analysis.
             </p>
-            <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-emerald-300 font-mono text-xs sm:text-xs">
+            <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-emerald-300 font-mono text-[11px] sm:text-xs">
               <span>🛠️ LABS: Click any orbital laboratory for a 9-dimension breakdown.</span>
             </div>
           </div>
@@ -179,20 +192,20 @@ export default function HUD() {
 
         {/* 7. SCENE 07: COMMAND DOME // DYSON SPHERE MEGASTRUCTURE (Page 14.2) */}
         <Section offset={14.2} style={{ alignItems: "center", textAlign: "center" }}>
-          <div className="max-w-3xl select-none bg-slate-950/80 backdrop-blur-2xl border border-white/15 p-5 sm:p-10 md:p-14 rounded-3xl shadow-2xl">
-            <span className="font-mono text-xs sm:text-xs tracking-widest text-amber-400 uppercase block mb-2 sm:mb-4">
+          <div className="max-w-3xl select-none bg-slate-950/80 backdrop-blur-2xl border border-white/15 p-5 sm:p-10 md:p-14 rounded-3xl shadow-2xl text-left md:text-center">
+            <span className="font-mono text-xs tracking-[0.15em] text-amber-400 uppercase block mb-2 sm:mb-4">
               MISSION CONTROL // STRATEGIC LIAISON
             </span>
-            <h2 className="text-2xl sm:text-4xl md:text-7xl font-light text-white tracking-tight mb-3 sm:mb-6">
+            <h2 className="font-space text-[38px] sm:text-4xl md:text-7xl font-medium md:font-light text-white tracking-tight leading-[0.98] md:leading-tight mb-3 sm:mb-6">
               Command Dome
             </h2>
             <div className="py-2 sm:py-4 border-y border-white/10 my-3 sm:my-6 font-mono text-sm sm:text-lg md:text-2xl text-emerald-400 tracking-widest font-semibold">
               ... CORRECTION. MISSION STILL ACTIVE.
             </div>
-            <p className="text-xs sm:text-base md:text-xl text-slate-300 font-light leading-relaxed max-w-xl mx-auto mb-4 sm:mb-6">
+            <p className="font-sans text-[15px] sm:text-base md:text-xl text-slate-300 font-light leading-relaxed max-w-[70vw] sm:max-w-xl mx-auto mb-4 sm:mb-6">
               I&apos;m currently exploring Product Management opportunities where I can contribute through user research, analytics, structured product thinking, and AI-powered product development. I&apos;d love to connect.
             </p>
-            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-slate-400 font-mono text-xs sm:text-xs">
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-slate-400 font-mono text-[11px] sm:text-xs">
               <span>✨ LIAISON: Use the Command Dashboard below to schedule walkthrough or review specs.</span>
             </div>
           </div>

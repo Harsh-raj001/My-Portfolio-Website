@@ -51,7 +51,12 @@ export default function InteractionHintToast() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
-          className="fixed bottom-24 right-4 md:right-8 z-[100] max-w-[calc(100vw-2rem)] w-[calc(100vw-2rem)] sm:w-[280px] p-4 bg-slate-950/95 border border-cyan-500/50 rounded-lg shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md pointer-events-none box-border"
+          className="fixed bottom-24 z-[100] w-[calc(100vw-2rem)] sm:w-[280px] p-4 bg-slate-950/95 border border-cyan-500/50 rounded-lg shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md pointer-events-none"
+          style={{
+            right: "clamp(1rem, 4vw, 2rem)",
+            maxWidth: "calc(100vw - 2rem)",
+            boxSizing: "border-box"
+          }}
         >
           <div className="flex items-start gap-3">
             <div className="mt-1.5 flex-shrink-0 relative flex h-2.5 w-2.5">
