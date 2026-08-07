@@ -39,7 +39,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://harsh-raj001.github.io/My-Portfolio-Website"),
+  metadataBase: new URL("https://harsh-raj001.github.io/NEXUS-My-Product-Portfolio"),
   title: "Harsh Raj | Product Manager Portfolio",
   description: "An unforgettable 3D cinematic storytelling experience representing the career journey of aspiring Product Manager Harsh Raj. Google Doodle charm, Pixar storytelling, NASA space exploration, Unreal Engine 5 lighting, and Apple minimalism.",
   alternates: {
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "Harsh Raj | Product Manager Portfolio",
     description: "This person understands products, solves problems, and builds meaningful experiences.",
     type: "website",
-    url: "https://harsh-raj001.github.io/My-Portfolio-Website",
+    url: "https://harsh-raj001.github.io/NEXUS-My-Product-Portfolio",
     siteName: "Project Odyssey",
   },
   twitter: {
