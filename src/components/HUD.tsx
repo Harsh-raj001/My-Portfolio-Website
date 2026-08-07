@@ -2,8 +2,13 @@
 
 import { Scroll } from "@react-three/drei";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { isMobile } from "../lib/qualityTier";
 import { EXPLORER_NAME, MISSION_OBJECTIVE } from "../data/missionData";
 
+// Section positions content at `offset * 100vh` inside the Drei ScrollControls HTML layer.
+// Animation fires immediately on mount (not IntersectionObserver) so appearance is
+// frame-aligned with the ScrollControls timeline, not async DOM observation.
 const Section = ({ 
   children, 
   offset, 
@@ -13,6 +18,11 @@ const Section = ({
   offset: number; 
   style?: React.CSSProperties; 
 }) => {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    setMobile(isMobile);
+  }, []);
+
   return (
     <section 
       style={{
@@ -27,19 +37,29 @@ const Section = ({
         pointerEvents: "none",
         ...style
       }}
+      className="box-border z-10"
     >
+      {/* 
+        Mobile: pure opacity fade, 0.25s — no Y offset to avoid positional jitter.
+        Desktop: opacity + subtle Y lift, 0.7s cinematic ease.
+        animate fires on mount immediately; whileInView / IntersectionObserver removed.
+      */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-15%" }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="pointer-events-auto max-w-4xl"
+        initial={{ opacity: 0, y: mobile ? 0 : 28 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: mobile ? 0.25 : 0.7,
+          ease: [0.16, 1, 0.3, 1],
+          delay: mobile ? 0 : 0.05,
+        }}
+        className="pointer-events-none w-full max-w-[85vw] md:max-w-4xl"
       >
         {children}
       </motion.div>
     </section>
   );
 };
+
 
 export default function HUD() {
   return (

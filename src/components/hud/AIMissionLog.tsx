@@ -108,7 +108,7 @@ export default function AURAObserver({
       aria-live="polite"
       aria-atomic="true"
       aria-label="A.U.R.A. Flight Computer Cockpit Monitor"
-      className="fixed bottom-4 left-4 right-20 sm:bottom-6 sm:left-6 sm:right-auto z-40 max-w-[calc(100%-5.5rem)] sm:max-w-[380px] w-full pointer-events-none select-none"
+      className="relative md:fixed md:bottom-6 md:left-6 z-40 w-full md:max-w-[380px] pointer-events-none select-none"
       style={{ 
         transform: "translate3d(0, 0, 0)", 
         willChange: "transform",
@@ -117,7 +117,7 @@ export default function AURAObserver({
         paddingRight: "env(safe-area-inset-right, 0px)",
       }}
     >
-      <div className={`bg-slate-950/90 backdrop-blur-xl border p-4 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.8)] pointer-events-auto transition-all relative overflow-hidden group ${
+      <div className={`bg-slate-950/90 backdrop-blur-xl border p-4 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.8)] transition-all relative overflow-hidden group ${
         isExec ? "border-amber-500/50 shadow-[0_0_35px_rgba(245,158,11,0.2)]" : "border-cyan-500/30"
       }`}>
         {/* Top Accent Glow Bar */}

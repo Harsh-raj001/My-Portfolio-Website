@@ -29,7 +29,7 @@ export default function CommandDashboard() {
         initial={{ y: 60, opacity: 0 }}
         animate={{ y: isVisible ? 0 : 60, opacity: isVisible ? 1 : 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="bg-slate-950/95 backdrop-blur-2xl border border-emerald-500/40 max-w-5xl w-full p-5 sm:p-6 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.9)] flex flex-col gap-5 pointer-events-auto select-none relative overflow-hidden"
+        className="bg-slate-950/95 backdrop-blur-2xl border border-emerald-500/40 max-w-5xl w-full p-5 sm:p-6 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.9)] flex flex-col gap-5 pointer-events-none select-none relative overflow-hidden"
       >
         {/* Top Accent Glow */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 shadow-[0_0_20px_#10B981]" />
@@ -84,7 +84,7 @@ export default function CommandDashboard() {
               rel="noopener noreferrer"
               aria-label="View Resume"
               onClick={() => audioEngine.playHoverPing()}
-              className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group"
+              className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group pointer-events-auto"
             >
               <FileText className="text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-medium text-slate-300 group-hover:text-white">Resume</span>
@@ -96,7 +96,7 @@ export default function CommandDashboard() {
               rel="noopener noreferrer"
               aria-label="View LinkedIn Profile"
               onClick={() => audioEngine.playHoverPing()}
-              className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group"
+              className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group pointer-events-auto"
             >
               <User className="text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-medium text-slate-300 group-hover:text-white">LinkedIn</span>
@@ -108,7 +108,7 @@ export default function CommandDashboard() {
               rel="noopener noreferrer"
               aria-label="View GitHub Profile"
               onClick={() => audioEngine.playHoverPing()}
-              className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group"
+              className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group pointer-events-auto"
             >
               <Code className="text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-medium text-slate-300 group-hover:text-white">GitHub</span>
@@ -119,7 +119,7 @@ export default function CommandDashboard() {
                 href={FINALE_LINKS.tel}
                 aria-label="Call Phone Number"
                 onClick={() => audioEngine.playHoverPing()}
-                className="flex flex-col items-center justify-center p-4 border border-emerald-500/20 rounded-xl bg-slate-900/50 hover:bg-emerald-900/30 hover:border-emerald-400/50 transition-all group"
+                className="flex flex-col items-center justify-center p-4 border border-emerald-500/20 rounded-xl bg-slate-900/50 hover:bg-emerald-900/30 hover:border-emerald-400/50 transition-all group pointer-events-auto"
               >
                 <Phone className="text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
                 <span className="text-xs font-medium text-slate-300 group-hover:text-white">Call</span>
@@ -131,7 +131,7 @@ export default function CommandDashboard() {
             href={`mailto:${FINALE_LINKS.email}?subject=Initiating Contact // Mission Build`}
             aria-label="Send Email"
             onClick={() => audioEngine.playHoverPing()}
-            className="bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-mono font-bold text-xs uppercase tracking-widest px-6 py-2.5 rounded-full transition-all shadow-[0_0_20px_rgba(16,185,129,0.5)] cursor-pointer hover:scale-105 inline-flex items-center gap-2"
+            className="bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 text-slate-950 font-mono font-bold text-xs uppercase tracking-widest px-6 py-2.5 rounded-full transition-all shadow-[0_0_20px_rgba(16,185,129,0.5)] cursor-pointer hover:scale-105 inline-flex items-center gap-2 pointer-events-auto"
           >
             <span>Initiate Direct Contact</span>
             <span>✉</span>

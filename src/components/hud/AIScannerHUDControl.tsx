@@ -82,7 +82,7 @@ export default function AIScannerHUDControl() {
   const scale = isScrolling ? 0.96 : 1;
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 pointer-events-auto select-none font-mono">
+    <div className="relative md:fixed md:bottom-6 md:right-6 z-50 pointer-events-none select-none font-mono flex justify-end md:block">
       <motion.button
         onClick={handleToggle}
         initial={{ y: 40, opacity: 0 }}
@@ -97,7 +97,7 @@ export default function AIScannerHUDControl() {
           damping: 20,
           opacity: { duration: 0.25 }
         }}
-        className={`relative flex items-center justify-center gap-2 px-4 py-2.5 rounded-full border transition-all duration-300 backdrop-blur-md cursor-pointer ${
+        className={`relative flex items-center justify-center gap-2 px-4 py-2.5 rounded-full border transition-all duration-300 backdrop-blur-md cursor-pointer pointer-events-auto ${
           isScannerActive
             ? "bg-cyan-500 text-slate-950 border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.6)]"
             : "bg-slate-950/80 text-cyan-400 border-cyan-500/30 hover:border-cyan-400/80 hover:text-cyan-300"

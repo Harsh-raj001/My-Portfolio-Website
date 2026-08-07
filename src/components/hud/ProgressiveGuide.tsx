@@ -46,7 +46,7 @@ export default function ProgressiveGuide() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="fixed bottom-[35%] left-1/2 -translate-x-1/2 z-40 pointer-events-none flex flex-col items-center gap-2 select-none"
+          className="relative self-center md:self-auto md:fixed md:bottom-[35%] md:left-1/2 md:-translate-x-1/2 z-40 pointer-events-none flex flex-col items-center gap-2 select-none"
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}
@@ -72,7 +72,7 @@ export default function ProgressiveGuide() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.95 }}
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          className="fixed bottom-20 left-1/2 -translate-x-1/2 z-40 pointer-events-none select-none font-mono"
+          className="relative self-center md:self-auto md:fixed md:bottom-20 md:left-1/2 md:-translate-x-1/2 z-40 pointer-events-none select-none font-mono"
         >
           <div className="bg-slate-950/85 backdrop-blur-md border border-cyan-500/40 px-5 py-3 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.15)] flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping shrink-0" />
@@ -90,7 +90,7 @@ export default function ProgressiveGuide() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed bottom-20 left-1/2 -translate-x-1/2 z-40 pointer-events-none select-none font-mono"
+          className="relative self-center md:self-auto md:fixed md:bottom-20 md:left-1/2 md:-translate-x-1/2 z-40 pointer-events-none select-none font-mono"
         >
           <div className="bg-slate-950/85 backdrop-blur-md border border-emerald-500/40 px-5 py-3 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.15)] flex items-center gap-3">
             <Compass size={14} className="text-emerald-400 animate-spin shrink-0" style={{ animationDuration: "5s" }} />

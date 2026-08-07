@@ -68,7 +68,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 20 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="bg-slate-950 border-t sm:border border-slate-800 w-full sm:w-[90%] sm:max-w-4xl flex flex-col sm:flex-row sm:rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.8)] relative max-h-[90vh] sm:max-h-[85vh] overflow-hidden"
+        className="bg-slate-950 border-t sm:border border-slate-800 w-full sm:w-[90%] sm:max-w-2xl flex flex-col sm:rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.8)] relative max-h-[90vh] sm:max-h-[85vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <motion.div 
@@ -76,7 +76,7 @@ export default function UniversalNodeModal({ node, onClose }: UniversalNodeModal
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 200 }}
-          className="bg-slate-900/90 border border-white/15 sm:max-w-2xl w-full h-[100dvh] sm:h-[85vh] rounded-t-3xl sm:rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] relative text-slate-100 overflow-hidden flex flex-col sm:m-4"
+          className="bg-slate-900/90 border-t border-white/15 w-full flex-1 flex flex-col relative text-slate-100 overflow-hidden min-h-0"
           onClick={(e) => e.stopPropagation()}
           style={{ touchAction: "pan-y" }}
         >

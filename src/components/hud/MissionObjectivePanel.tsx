@@ -42,7 +42,7 @@ export default function MissionObjectivePanel() {
 
   return (
     <div 
-      className="fixed top-[108px] left-4 sm:top-24 sm:left-6 md:left-12 z-40 pointer-events-none max-w-[calc(100%-2rem)] w-64 sm:w-80"
+      className="relative md:fixed md:top-24 md:left-6 lg:left-12 z-40 pointer-events-none w-full max-w-full md:w-64 lg:w-80"
       style={{
         paddingTop: "env(safe-area-inset-top, 0px)",
         paddingLeft: "env(safe-area-inset-left, 0px)",

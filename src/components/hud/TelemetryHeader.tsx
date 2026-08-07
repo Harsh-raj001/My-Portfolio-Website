@@ -31,7 +31,7 @@ export default function TelemetryHeader() {
   return (
     <header 
       aria-label="Aerospace Telemetry Header"
-      className="fixed top-3 left-3 sm:top-6 sm:left-6 z-50 pointer-events-none select-none font-mono text-xs sm:text-xs tracking-widest text-slate-300"
+      className="relative md:fixed md:top-6 md:left-6 z-50 pointer-events-none select-none font-mono text-xs sm:text-xs tracking-widest text-slate-300 w-full md:w-auto"
       style={{ 
         transform: "translate3d(0, 0, 0)", 
         willChange: "transform",
@@ -40,7 +40,7 @@ export default function TelemetryHeader() {
       }}
     >
       {/* Top Left: Aerospace Telemetry Breadcrumb Tracker */}
-      <div className="flex items-center gap-2 sm:gap-3 bg-slate-950/85 backdrop-blur-md px-2.5 py-1 sm:px-4 sm:py-2 rounded-full border border-cyan-500/30 shadow-[0_0_20px_rgba(0,240,255,0.15)] pointer-events-auto">
+      <div className="flex items-center gap-2 sm:gap-3 bg-slate-950/85 backdrop-blur-md px-2.5 py-1 sm:px-4 sm:py-2 rounded-full border border-cyan-500/30 shadow-[0_0_20px_rgba(0,240,255,0.15)] pointer-events-none">
         {/* Explorer Beacon */}
         <div className="flex items-center gap-1.5 shrink-0">
           <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />

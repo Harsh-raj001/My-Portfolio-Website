@@ -22,10 +22,10 @@ export default function MobileNavMenu() {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-[999] md:hidden">
+    <div className="relative self-end md:hidden z-[999] pointer-events-none">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="p-3 bg-black/60 backdrop-blur-md border border-white/20 rounded-full text-white active:scale-95 transition-transform min-h-[44px] min-w-[44px] flex items-center justify-center shadow-lg"
+        className="p-3 bg-black/60 backdrop-blur-md border border-white/20 rounded-full text-white active:scale-95 transition-transform min-h-[44px] min-w-[44px] flex items-center justify-center shadow-lg pointer-events-auto cursor-pointer"
         aria-label="Toggle Navigation"
       >
         {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -38,7 +38,7 @@ export default function MobileNavMenu() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute top-16 right-0 w-64 bg-slate-900/95 backdrop-blur-xl border border-white/15 rounded-2xl p-4 shadow-2xl flex flex-col gap-2"
+            className="absolute top-16 right-0 w-64 bg-slate-900/95 backdrop-blur-xl border border-white/15 rounded-2xl p-4 shadow-2xl flex flex-col gap-2 pointer-events-auto"
           >
             <div className="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2 px-2">
               Navigation Data Link

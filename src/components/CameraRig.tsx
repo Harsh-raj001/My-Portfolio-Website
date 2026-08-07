@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef, useMemo } from "react";
-import { useThree } from "@react-three/fiber";
-import { useOptimizedFrame } from "../lib/frameOptimization";
+import { useThree, useFrame } from "@react-three/fiber";
 import { useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { easing } from "maath";
@@ -15,7 +14,7 @@ export default function CameraRig() {
   const cameraPos = useMemo(() => new THREE.Vector3(0, 2, 15), []);
   const prevFov = useRef(45); // Track FOV to avoid unnecessary matrix updates
 
-  useOptimizedFrame((state, delta) => {
+  useFrame((state, delta) => {
     const progress = scroll.offset; // 0.0 to 1.0
     const elapsed = state.clock.elapsedTime;
 
@@ -147,21 +146,20 @@ export default function CameraRig() {
 
     const isTeleporting = useMissionStore.getState().isTeleporting;
 
-    // 4. Aerospace Hydraulic Damping (maath.easing.damp3 with 0.25 factor for maximum fluidity)
-    // When skipping sections, disable damping for an instant snap.
-    easing.damp3(camera.position, cameraPos, isTeleporting ? 0 : 0.25, delta);
+    // 4. Aerospace Hydraulic Damping (Removed for immediate sync with ScrollControls)
+    camera.position.copy(cameraPos);
 
     // 5. Apply smooth lookAt orientation and roll banking
     camera.lookAt(lookAtTarget);
     if (rollAngle !== 0) {
-      easing.damp(camera.rotation, "z", rollAngle, isTeleporting ? 0 : 0.25, delta);
+      easing.damp(camera.rotation, "z", rollAngle, isTeleporting ? 0 : 0.05, delta);
     } else {
-      easing.damp(camera.rotation, "z", 0, isTeleporting ? 0 : 0.25, delta);
+      easing.damp(camera.rotation, "z", 0, isTeleporting ? 0 : 0.05, delta);
     }
 
     // 6. Dynamic FOV Interpolation (only update projection matrix when FOV changes)
     if (camera instanceof THREE.PerspectiveCamera) {
-      easing.damp(camera, "fov", targetFov, isTeleporting ? 0 : 0.25, delta);
+      easing.damp(camera, "fov", targetFov, isTeleporting ? 0 : 0.1, delta);
       // Only recalculate projection matrix if FOV actually changed (>0.01 deg)
       if (Math.abs(camera.fov - prevFov.current) > 0.01) {
         camera.updateProjectionMatrix();

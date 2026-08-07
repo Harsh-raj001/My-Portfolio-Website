@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { easing } from "maath";
+import { useMissionStore } from "../../store/missionStore";
 import { audioEngine } from "../../lib/audioEngine";
 import { qualitySettings, isMobile } from "../../lib/qualityTier";
 
@@ -112,8 +113,10 @@ export default function Spacecraft() {
     const bobbingY = Math.sin(state.clock.elapsedTime * 1.5) * 0.2;
     const weaveX = Math.cos(state.clock.elapsedTime * 0.8) * 0.3;
 
+    const isTeleporting = useMissionStore.getState().isTeleporting;
+
     targetPos.set(weaveX, bobbingY, zPos);
-    easing.damp3(groupRef.current.position, targetPos, 0.2, delta);
+    groupRef.current.position.copy(targetPos);
 
     // 2. Dynamic Banking and Pitching based on scroll velocity and movement
     const targetPitch = Math.max(-0.3, Math.min(0.3, vel * -1.5)) + Math.sin(state.clock.elapsedTime * 1.5) * 0.05;
@@ -121,7 +124,7 @@ export default function Spacecraft() {
     const targetYaw = weaveX * -0.1;
 
     targetRot.set(targetPitch, targetYaw, targetRoll);
-    easing.dampE(groupRef.current.rotation, targetRot, 0.25, delta);
+    easing.dampE(groupRef.current.rotation, targetRot, isTeleporting ? 0 : 0.05, delta);
 
     // 3. Unfolding Solar Panels (Deploy when leaving Launch area, progress > 0.08)
     const panelDeployTarget = currentOffset > 0.08 ? Math.PI / 2 : 0;
@@ -180,7 +183,7 @@ export default function Spacecraft() {
   const shipScale = isMobileDevice ? 0.65 : 1.0;
 
   return (
-    <group ref={groupRef} position={[0, 0, 0]} scale={shipScale}>
+    <group ref={groupRef} name="spacecraft" position={[0, 0, 0]} scale={shipScale}>
       {/* 🚀 PHASE 8: SPACECRAFT PLASMA THRUSTER EXHAUST TRAILS */}
       <ThrusterExhaustParticles velocityRef={velocity} />
 

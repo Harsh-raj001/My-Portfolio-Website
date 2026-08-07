@@ -44,7 +44,7 @@ import ProgressiveGuide from "./hud/ProgressiveGuide";
 
 import InteractionHintToast from "./hud/InteractionHintToast";
 import MobileNavMenu from "./hud/MobileNavMenu";
-
+import { SyncDebugger } from "./SyncDebugger";
 // Types & Audio
 import { CuriosityStory, ExperienceNode, ProductThinkingNode, PortfolioProject, PRDVaultItem } from "../types/mission";
 import { PORTFOLIO_PROJECTS, PRD_VAULT } from "../data/missionData";
@@ -406,19 +406,43 @@ export default function PortfolioScene() {
   return (
     <div className="relative w-screen h-screen bg-black overflow-hidden select-none">
       {/* --- DOM HUD OVERLAYS (OUTSIDE WEBGL CANVAS) --- */}
+      
+      {/* MOBILE FLEX HUD WRAPPER */}
+      <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 z-40 md:block md:p-0 md:static overflow-hidden box-border">
+        
+        {/* TOP MOBILE HUD */}
+        <div className="flex flex-col gap-3 md:contents items-start">
+          <MobileNavMenu />
+          <TelemetryHeader />
+          <ExecFastTrackHUD 
+            onTeleport={(target) => setTeleportTarget(target)} 
+            onToggleAudio={handleToggleAudio} 
+            onToggleExecutiveMode={handleToggleExecutiveMode}
+            onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+            isAudioMuted={isMuted} 
+            isExecutiveMode={isExecutiveMode}
+          />
+          {!isExecutiveMode && <MissionObjectivePanel />}
+          {!isExecutiveMode && <LevelProgressionOverlay />}
+        </div>
 
-      <MobileNavMenu />
-      <TelemetryHeader />
-      
-      <ExecFastTrackHUD 
-        onTeleport={(target) => setTeleportTarget(target)} 
-        onToggleAudio={handleToggleAudio} 
-        onToggleExecutiveMode={handleToggleExecutiveMode}
-        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-        isAudioMuted={isMuted} 
-        isExecutiveMode={isExecutiveMode}
-      />
-      
+        {/* BOTTOM MOBILE HUD */}
+        <div className="flex flex-col gap-3 justify-end items-end md:contents">
+          {!isExecutiveMode && (
+            <>
+              <ProgressiveGuide />
+              <InteractionHintToast />
+            </>
+          )}
+          <AIMissionLog 
+            operatingMode={operatingMode}
+            searchQuery={execSearchQuery}
+          />
+          {!isExecutiveMode && <AIScannerHUDControl />}
+        </div>
+      </div>
+
+      {/* --- GLOBAL OVERLAYS & MODALS --- */}
       <CommandPalette 
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
@@ -433,11 +457,6 @@ export default function PortfolioScene() {
             document.getElementById(`exec-sec-${sectionId}`)?.scrollIntoView({ behavior: "smooth" });
           }
         }}
-      />
-      
-      <AIMissionLog 
-        operatingMode={operatingMode}
-        searchQuery={execSearchQuery}
       />
       
       <FinaleContactDock />
@@ -466,25 +485,9 @@ export default function PortfolioScene() {
       {/* First-Time Visit Onboarding */}
       <OnboardingOverlay />
 
-      {/* Floating AI Scanner HUD Control */}
-      {!isExecutiveMode && (
-        <AIScannerHUDControl />
-      )}
-
-      {/* Action-Driven Progressive Guide & Interaction Toast */}
       {!isExecutiveMode && (
         <>
-          <ProgressiveGuide />
-          <InteractionHintToast />
-        </>
-      )}
-
-      {/* AAA UX Enhancements */}
-      {!isExecutiveMode && (
-        <>
-          <LevelProgressionOverlay />
           <MissionScanner />
-          <MissionObjectivePanel />
           <GlobalIdleTracker />
           <MissionCompleteSequence onEnterExecMode={() => {
             setOperatingMode("TRANSITIONING_TO_EXEC");
@@ -551,7 +554,14 @@ export default function PortfolioScene() {
           <ScrollControls 
             pages={16} 
             damping={isTeleporting ? 0 : (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1 ? 0.08 : 0.25)}
+            style={{ 
+              touchAction: 'pan-y', 
+              pointerEvents: 'auto', 
+              WebkitOverflowScrolling: 'touch', 
+              overscrollBehaviorY: 'contain' 
+            }}
           >
+            {process.env.NODE_ENV === 'development' && <SyncDebugger />}
             <ScrollTracker />
             <ScrollTeleporter targetProgress={teleportTarget} onComplete={() => setTeleportTarget(null)} />
 

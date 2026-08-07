@@ -84,7 +84,7 @@ export default function ExecFastTrackHUD({
 
       <nav 
         aria-label="Recruiter Fast-Track Bypass Navigation"
-        className="fixed top-14 right-3 sm:top-6 sm:right-6 z-50 flex flex-wrap items-center justify-end gap-2 pointer-events-auto font-mono text-xs select-none max-w-full px-2 sm:px-0"
+        className="relative md:fixed md:top-6 md:right-6 z-50 flex flex-wrap items-center justify-end gap-2 pointer-events-none font-mono text-xs select-none max-w-full px-2 sm:px-0 w-full md:w-auto"
         style={{ 
           transform: "translate3d(0, 0, 0)", 
           willChange: "transform",
@@ -98,7 +98,7 @@ export default function ExecFastTrackHUD({
             audioEngine.playHoverPing();
             onOpenCommandPalette?.();
           }}
-          className="hidden sm:flex items-center gap-1.5 bg-slate-950/80 hover:bg-slate-900/90 text-slate-300 hover:text-cyan-300 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15 hover:border-cyan-500/50 transition-all text-[11px] tracking-wider cursor-pointer"
+          className="hidden sm:flex items-center gap-1.5 bg-slate-950/80 hover:bg-slate-900/90 text-slate-300 hover:text-cyan-300 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15 hover:border-cyan-500/50 transition-all text-[11px] tracking-wider cursor-pointer pointer-events-auto"
           title="Open Universal Command Palette (Ctrl+K / ⌘+K)"
         >
           <span>🔍 SEARCH</span>
@@ -117,7 +117,7 @@ export default function ExecFastTrackHUD({
               triggerHaptic("selection");
               onToggleExecutiveMode?.();
             }}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-full border backdrop-blur-md transition-all text-[11px] font-extrabold tracking-wider cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-full border backdrop-blur-md transition-all text-[11px] font-extrabold tracking-wider cursor-pointer pointer-events-auto ${
               isExecutiveMode 
                 ? "bg-amber-500/20 text-amber-300 border-amber-500/40" 
                 : "bg-slate-950/80 text-cyan-400 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.15)]"
@@ -127,7 +127,7 @@ export default function ExecFastTrackHUD({
             <span>{isExecutiveMode ? "🛸 EXPLORER" : "⚡ EXEC MODE"}</span>
           </button>
         ) : (
-          <div className="flex flex-col bg-slate-950/90 backdrop-blur-xl p-3 rounded-xl border border-slate-800 shadow-[0_0_25px_rgba(245,158,11,0.15)] min-w-[180px]">
+          <div className="flex flex-col bg-slate-950/90 backdrop-blur-xl p-3 rounded-xl border border-slate-800 shadow-[0_0_25px_rgba(245,158,11,0.15)] min-w-[180px] pointer-events-auto">
             <span className="text-xs font-extrabold uppercase text-slate-500 tracking-widest mb-2 border-b border-slate-800 pb-1">MISSION MODE</span>
             
             <button
@@ -166,7 +166,7 @@ export default function ExecFastTrackHUD({
 
         {/* 1-Click Sector Teleportation Pills (Only displayed in Mission Mode) */}
         {!isExecutiveMode && (
-          <div className="hidden xl:flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-cyan-500/30 shadow-[0_0_20px_rgba(0,240,255,0.15)] animate-fadeIn">
+          <div className="hidden xl:flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-cyan-500/30 shadow-[0_0_20px_rgba(0,240,255,0.15)] animate-fadeIn pointer-events-auto">
             <span className="text-cyan-400/60 font-bold uppercase tracking-widest text-xs mr-1">
               [FAST-TRACK]:
             </span>
@@ -189,7 +189,7 @@ export default function ExecFastTrackHUD({
             audioEngine.playHoverPing();
             onToggleAudio?.();
           }}
-          className="flex items-center gap-2 bg-slate-950/80 hover:bg-slate-900/90 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/15 text-slate-300 hover:text-white transition-all shadow-lg cursor-pointer group"
+          className="flex items-center gap-2 bg-slate-950/80 hover:bg-slate-900/90 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/15 text-slate-300 hover:text-white transition-all shadow-lg cursor-pointer group pointer-events-auto"
           title="Toggle Web Audio API Atmospheric Synthesizer"
         >
           <span className={`w-2 h-2 rounded-full transition-colors ${isAudioMuted ? "bg-rose-500" : "bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"}`} />
@@ -204,7 +204,7 @@ export default function ExecFastTrackHUD({
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => audioEngine.playHoverPing()}
-          className="flex items-center gap-1.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/40 hover:to-blue-500/40 text-cyan-300 hover:text-white font-semibold text-[11px] tracking-widest px-4 py-2 rounded-full backdrop-blur-md border border-cyan-400/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] cursor-pointer"
+          className="flex items-center gap-1.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/40 hover:to-blue-500/40 text-cyan-300 hover:text-white font-semibold text-[11px] tracking-widest px-4 py-2 rounded-full backdrop-blur-md border border-cyan-400/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] cursor-pointer pointer-events-auto"
         >
           <span>RESUME.PDF</span>
           <span className="text-xs">↗</span>

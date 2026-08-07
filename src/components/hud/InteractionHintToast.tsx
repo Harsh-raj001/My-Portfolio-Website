@@ -51,7 +51,7 @@ export default function InteractionHintToast() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
-          className="fixed bottom-24 right-6 md:right-12 z-[100] w-[280px] p-4 bg-slate-950/95 border border-cyan-500/50 rounded-lg shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md pointer-events-auto"
+          className="fixed bottom-24 right-4 md:right-8 z-[100] max-w-[calc(100vw-2rem)] w-[calc(100vw-2rem)] sm:w-[280px] p-4 bg-slate-950/95 border border-cyan-500/50 rounded-lg shadow-[0_0_20px_rgba(0,240,255,0.2)] backdrop-blur-md pointer-events-none box-border"
         >
           <div className="flex items-start gap-3">
             <div className="mt-1.5 flex-shrink-0 relative flex h-2.5 w-2.5">
@@ -64,7 +64,7 @@ export default function InteractionHintToast() {
             </div>
             <button 
               onClick={handleDismiss}
-              className="text-slate-500 hover:text-white transition-colors"
+              className="text-slate-500 hover:text-white transition-colors pointer-events-auto cursor-pointer"
             >
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M2 10L10 2M2 2L10 10" />

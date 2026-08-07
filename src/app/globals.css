@@ -133,15 +133,3 @@ canvas ~ div[style*="overflow: scroll"] {
   }
 }
 
-@media (max-width: 767px) {
-  /* Disable read-only HUD text on mobile */
-  .fixed.top-6, .fixed.top-24, .fixed.top-20,
-  .fixed.bottom-4, .fixed.bottom-24 {
-    pointer-events: none !important;
-  }
-  
-  /* But keep buttons and interactive elements working */
-  button, [role="button"], input, select, textarea, a {
-    pointer-events: auto !important;
-  }
-}
