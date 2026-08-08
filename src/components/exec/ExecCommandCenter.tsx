@@ -568,18 +568,102 @@ export default function ExecCommandCenter({
               </ScanReveal>
 
               {/* 12. CONTACT */}
-              <ScanReveal id="exec-sec-contact" className="space-y-6 pt-8 border-t border-cyan-900/30">
-                <h2 className="text-xl font-bold tracking-tight text-white mb-6 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
-                  Contact
-                </h2>
-                <div className="flex flex-wrap gap-3">
-                  <ResourceLink href={RESOURCES.PROFILES.linkedin} className={buttonClass} icon={<User size={14}/>}>LinkedIn</ResourceLink>
-                  <ResourceLink href={RESOURCES.PROFILES.github} className={buttonClass} icon={<Code size={14}/>}>GitHub</ResourceLink>
-                  <ResourceLink href={RESOURCES.PROFILES.portfolio} className={buttonClass} icon={<Globe size={14}/>}>Portfolio Database</ResourceLink>
-                  <ResourceLink href={RESOURCES.PROFILES.website} className={buttonClass} icon={<Globe size={14}/>}>Current Website</ResourceLink>
-                  <ResourceLink href={RESOURCES.CONTACT.mailto} className={buttonClass} icon={<Mail size={14}/>}>Email</ResourceLink>
-                  <ResourceLink href={RESOURCES.CONTACT.phone} className={buttonClass} icon={<Phone size={14}/>}>Phone</ResourceLink>
+              <ScanReveal id="exec-sec-contact" className="space-y-8 pt-8 pb-16 border-t border-cyan-900/30">
+                <div className="space-y-2">
+                  <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
+                    Contact
+                  </h2>
+                  <p className="text-slate-400 text-sm pl-3.5">Let's connect.</p>
+                </div>
+
+                {/* Primary Contacts Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* LinkedIn Card */}
+                  <a 
+                    href={RESOURCES.PROFILES.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-4 bg-slate-900/20 border border-cyan-900/30 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] rounded-xl p-5 hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer pointer-events-auto"
+                  >
+                    <div className="p-3 rounded-lg bg-cyan-950/40 border border-cyan-900/30 text-cyan-400 group-hover:text-cyan-300 group-hover:border-cyan-400/30 transition-colors">
+                      <User size={20} />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors">LinkedIn</span>
+                      <span className="text-xs text-slate-400">Professional profile</span>
+                    </div>
+                  </a>
+
+                  {/* GitHub Card */}
+                  <a 
+                    href={RESOURCES.PROFILES.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-4 bg-slate-900/20 border border-cyan-900/30 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] rounded-xl p-5 hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer pointer-events-auto"
+                  >
+                    <div className="p-3 rounded-lg bg-cyan-950/40 border border-cyan-900/30 text-cyan-400 group-hover:text-cyan-300 group-hover:border-cyan-400/30 transition-colors">
+                      <Code size={20} />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors">GitHub</span>
+                      <span className="text-xs text-slate-400">Projects & code</span>
+                    </div>
+                  </a>
+
+                  {/* Email Card */}
+                  <a 
+                    href={RESOURCES.CONTACT.mailto}
+                    className="flex items-center gap-4 bg-slate-900/20 border border-cyan-900/30 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] rounded-xl p-5 hover:-translate-y-0.5 transition-all duration-300 group cursor-pointer pointer-events-auto"
+                  >
+                    <div className="p-3 rounded-lg bg-cyan-950/40 border border-cyan-900/30 text-cyan-400 group-hover:text-cyan-300 group-hover:border-cyan-400/30 transition-colors">
+                      <Mail size={20} />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors">Email</span>
+                      <span className="text-xs text-slate-400">Get in touch</span>
+                    </div>
+                  </a>
+                </div>
+
+                {/* Secondary Links Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+                  {/* Portfolio Database */}
+                  <a 
+                    href={RESOURCES.PROFILES.portfolio}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 bg-slate-950/40 border border-cyan-950/40 hover:border-cyan-900/50 hover:bg-slate-900/10 rounded-xl px-4 py-3.5 transition-all duration-300 group cursor-pointer pointer-events-auto"
+                  >
+                    <Globe size={14} className="text-slate-500 group-hover:text-cyan-400 transition-colors" />
+                    <div className="flex flex-col text-left">
+                      <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors">Portfolio Database</span>
+                    </div>
+                  </a>
+
+                  {/* Current Website */}
+                  <a 
+                    href={RESOURCES.PROFILES.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 bg-slate-950/40 border border-cyan-950/40 hover:border-cyan-900/50 hover:bg-slate-900/10 rounded-xl px-4 py-3.5 transition-all duration-300 group cursor-pointer pointer-events-auto"
+                  >
+                    <Globe size={14} className="text-slate-500 group-hover:text-cyan-400 transition-colors" />
+                    <div className="flex flex-col text-left">
+                      <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors">Current Website</span>
+                    </div>
+                  </a>
+
+                  {/* Phone */}
+                  <a 
+                    href={RESOURCES.CONTACT.phone}
+                    className="flex items-center gap-3 bg-slate-950/40 border border-cyan-950/40 hover:border-cyan-900/50 hover:bg-slate-900/10 rounded-xl px-4 py-3.5 transition-all duration-300 group cursor-pointer pointer-events-auto"
+                  >
+                    <Phone size={14} className="text-slate-500 group-hover:text-cyan-400 transition-colors" />
+                    <div className="flex flex-col text-left">
+                      <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors">Phone</span>
+                    </div>
+                  </a>
                 </div>
               </ScanReveal>
 
