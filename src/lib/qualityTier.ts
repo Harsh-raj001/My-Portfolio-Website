@@ -62,17 +62,17 @@ function buildSettings(tier: QualityTier): QualitySettings {
     case "LOW":
       return {
         tier,
-        dpr: [1, 1],
-        enableBloom: false,
-        bloomIntensity: 0,
+        dpr: [1, 1.5], // Sharper resolution on mobile devices
+        enableBloom: true, // Restore green glowing beacons and soft bloom
+        bloomIntensity: 0.45,
         shadowMapSize: 0,
         enableShadows: false,
-        sparkleMultiplier: 0,
-        particleMultiplier: 0.25,
-        droneCount: 100,
-        plasmaBeamCount: 6,
-        antialias: false,
-        enableSparkles: false,
+        sparkleMultiplier: 0.5,
+        particleMultiplier: 0.5,
+        droneCount: 200,
+        plasmaBeamCount: 8,
+        antialias: true, // Sharp wireframes
+        enableSparkles: true,
         reducedMotion,
       };
     case "MEDIUM":

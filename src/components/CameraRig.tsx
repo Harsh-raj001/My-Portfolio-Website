@@ -6,6 +6,7 @@ import { useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { easing } from "maath";
 import { useMissionStore } from "../store/missionStore";
+import { isMobile } from "../lib/qualityTier";
 
 export default function CameraRig() {
   const scroll = useScroll();
@@ -52,7 +53,7 @@ export default function CameraRig() {
       lookX = 0;
       lookY = 0;
       lookZ = -60; // Keep Veridian Prime anchored in center frame
-      targetFov = 40; // Tight orbital cinematography
+      targetFov = isMobile ? 50 : 40; // Widen FOV on mobile to prevent beacon clipping
     } else if (progress >= 0.26 && progress < 0.40) {
       // SCENE 03: KAOS STRAIT // ASTEROID SLALOM (Z: -110 to -180)
       // Dynamic evasive weaving through procedural rock debris with banking roll

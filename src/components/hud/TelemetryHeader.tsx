@@ -31,7 +31,7 @@ export default function TelemetryHeader() {
   return (
     <header 
       aria-label="Aerospace Telemetry Header"
-      className="relative md:fixed md:top-6 md:left-6 z-50 pointer-events-none select-none font-mono text-xs sm:text-xs tracking-widest text-slate-300 w-full md:w-auto"
+      className="absolute bottom-28 left-4 right-4 z-40 pointer-events-none select-none font-mono text-xs tracking-widest text-slate-300 w-auto md:fixed md:top-6 md:left-6 md:bottom-auto md:w-auto"
       style={{ 
         transform: "translate3d(0, 0, 0)", 
         willChange: "transform",

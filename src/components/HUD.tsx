@@ -3,8 +3,19 @@
 import { Scroll } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { isMobile } from "../lib/qualityTier";
 import { EXPLORER_NAME, MISSION_OBJECTIVE } from "../data/missionData";
+
+// Hook to track responsive width dynamically on resize
+function useWindowWidth() {
+  const [width, setWidth] = useState(1200); // Safe desktop default for SSR/initial load
+  useEffect(() => {
+    setWidth(window.innerWidth);
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return width;
+}
 
 // Section positions content at `offset * 100vh` inside the Drei ScrollControls HTML layer.
 // Animation fires immediately on mount (not IntersectionObserver) so appearance is
@@ -18,22 +29,18 @@ const Section = ({
   offset: number; 
   style?: React.CSSProperties; 
 }) => {
-  const [mobile, setMobile] = useState(false);
-  useEffect(() => {
-    setMobile(isMobile);
-  }, []);
+  const width = useWindowWidth();
+  const mobile = width < 1024; // 1024px strict breakpoint
 
   // Determine if this is a hero/transition/command section that should remain centered on mobile
   const isCenteredOnMobile = offset === 10 || offset === 14.2;
 
   const sectionStyle = mobile ? {
     position: "absolute" as const,
-    top: `${offset * 100}vh`,
+    top: `${offset * 100 + 16}vh`,
     width: "100%",
-    height: "100vh",
     display: "flex",
     flexDirection: "column" as const,
-    justifyContent: "center",
     alignItems: isCenteredOnMobile ? "center" as const : "flex-start" as const,
     textAlign: isCenteredOnMobile ? "center" as const : "left" as const,
     paddingLeft: isCenteredOnMobile ? "0" : "10vw",
@@ -67,7 +74,7 @@ const Section = ({
           ease: [0.16, 1, 0.3, 1],
           delay: mobile ? 0 : 0.05,
         }}
-        className="pointer-events-none w-full max-w-[85vw] md:max-w-4xl"
+        className="pointer-events-none w-full max-w-[85vw] lg:max-w-4xl"
         style={mobile ? { width: isCenteredOnMobile ? "85vw" : "76vw", maxWidth: isCenteredOnMobile ? "85vw" : "76vw" } : undefined}
       >
         {children}
@@ -87,10 +94,10 @@ export default function HUD() {
             <div className="inline-block bg-white/5 border border-white/10 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full font-mono text-[10px] sm:text-xs tracking-[0.15em] text-emerald-400 uppercase">
               MISSION STATUS // PREPARING LAUNCH
             </div>
-            <h1 className="font-space text-[38px] sm:text-5xl md:text-8xl font-medium md:font-light tracking-tighter text-white leading-[0.98] md:leading-tight">
+            <h1 className="font-space text-[32px] sm:text-5xl lg:text-8xl font-medium lg:font-light tracking-tighter text-white leading-[1.1] lg:leading-tight">
               Explorer: <span className="font-normal text-amber-400">{EXPLORER_NAME}</span>
             </h1>
-            <p className="font-sans text-[15px] sm:text-lg md:text-2xl text-slate-300 max-w-[70vw] sm:max-w-xl font-light tracking-wide leading-relaxed">
+            <p className="font-sans text-[15px] sm:text-lg lg:text-2xl text-slate-300 max-w-[70vw] sm:max-w-xl font-light tracking-wide leading-relaxed">
               <strong className="text-white font-normal block mb-1 text-base sm:text-lg">Mission Objective:</strong>
               &ldquo;{MISSION_OBJECTIVE}&rdquo;
             </p>
@@ -107,14 +114,14 @@ export default function HUD() {
 
         {/* 2. SCENE 02: VERIDIAN PRIME // PLANET OF CURIOSITY (Page 2 - 4) */}
         <Section offset={2} style={{ alignItems: "center", textAlign: "center" }}>
-          <div className="w-full select-none text-left md:text-center flex flex-col items-start md:items-center">
+          <div className="w-full select-none text-left lg:text-center flex flex-col items-start lg:items-center">
             <span className="font-mono text-xs tracking-[0.15em] text-amber-400 uppercase block mb-2">
               CHAPTER ONE // UNDERGRADUATE FOUNDATIONS
             </span>
-            <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
+            <h2 className="font-space text-[28px] sm:text-4xl lg:text-6xl text-white font-medium lg:font-light tracking-tight leading-[1.1] lg:leading-tight mb-3">
               Veridian <span className="text-amber-400 font-normal">Prime</span>
             </h2>
-            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl md:mx-auto">
+            <p className="font-sans text-[15px] sm:text-base lg:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl lg:mx-auto">
               Where empathy and inquiry take root. Before building products, one must understand human psychology, team resilience, and the art of listening to what isn&apos;t being said.
             </p>
             <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-amber-300 font-mono text-[11px] sm:text-xs text-left">
@@ -129,10 +136,10 @@ export default function HUD() {
             <span className="font-mono text-xs tracking-[0.15em] text-rose-400 uppercase block mb-2">
               CHAPTER TWO // THE PHILOSOPHICAL GAUNTLET
             </span>
-            <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
+            <h2 className="font-space text-[28px] sm:text-4xl lg:text-6xl text-white font-medium lg:font-light tracking-tight leading-[1.1] lg:leading-tight mb-3">
               The Kaos <span className="text-rose-400 font-normal">Strait</span>
             </h2>
-            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl">
+            <p className="font-sans text-[15px] sm:text-base lg:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl">
               Navigating the inevitable ambiguity, scope creep, and executive friction of real-world product management. We do not attempt to destroy obstacles; we prioritize navigation around them.
             </p>
             <div className="inline-flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-rose-300 font-mono text-[11px] sm:text-xs">
@@ -143,14 +150,14 @@ export default function HUD() {
 
         {/* 4. SCENE 04: SYNTHESIS-V // CYBERNETIC LEARNING BELT (Page 7 - 9.5) */}
         <Section offset={7} style={{ alignItems: "flex-end", textAlign: "right", paddingRight: "10vw" }}>
-          <div className="w-full select-none text-left md:text-right flex flex-col items-start md:items-end">
+          <div className="w-full select-none text-left lg:text-right flex flex-col items-start lg:items-end">
             <span className="font-mono text-xs tracking-[0.15em] text-cyan-400 uppercase block mb-2">
               CHAPTER THREE // KNOWLEDGE MONOLITHS
             </span>
-            <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
+            <h2 className="font-space text-[28px] sm:text-4xl lg:text-6xl text-white font-medium lg:font-light tracking-tight leading-[1.1] lg:leading-tight mb-3">
               Synthesis-<span className="text-cyan-400 font-normal">V</span>
             </h2>
-            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl md:ml-auto">
+            <p className="font-sans text-[15px] sm:text-base lg:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl lg:ml-auto">
               Transforming raw knowledge into executive analytical frameworks. From machine learning and product analytics to unit economics and statistical rigor at scale.
             </p>
             <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-cyan-300 font-mono text-[11px] sm:text-xs">
@@ -161,15 +168,15 @@ export default function HUD() {
 
         {/* 5. SCENE 05: WORMHOLE WARP CONDUIT (Page 10) */}
         <Section offset={10} style={{ alignItems: "center", textAlign: "center" }}>
-          <div className="w-full select-none text-left md:text-center flex flex-col items-start md:items-center">
+          <div className="w-full select-none text-left lg:text-center flex flex-col items-start lg:items-center">
             <span className="font-mono text-xs tracking-[0.15em] text-pink-400 uppercase block mb-2 sm:mb-3">
               MISSION LOG // WARP DRIVE ENGAGED
             </span>
-            <h2 className="font-space text-[30px] sm:text-3xl md:text-5xl font-medium md:font-light text-white tracking-tight leading-[1.05] md:leading-tight mb-3 sm:mb-4">
+            <h2 className="font-space text-[30px] sm:text-3xl lg:text-5xl font-medium lg:font-light text-white tracking-tight leading-[1.05] lg:leading-tight mb-3 sm:mb-4">
               Learning creates <span className="text-cyan-400">possibility</span>.<br />
               Building creates <span className="text-emerald-400">impact</span>.
             </h2>
-            <p className="text-[10px] sm:text-sm font-mono text-slate-400 tracking-[0.15em] uppercase animate-pulse md:mx-auto">
+            <p className="text-[10px] sm:text-sm font-mono text-slate-400 tracking-[0.15em] uppercase animate-pulse lg:mx-auto">
               [AUTO-MOMENTUM GLIDE ENGAGED: ACCELERATING INTO ORBITAL RESEARCH SECTOR]
             </p>
           </div>
@@ -181,10 +188,10 @@ export default function HUD() {
             <span className="font-mono text-xs tracking-[0.15em] text-emerald-400 uppercase block mb-2">
               CHAPTER FOUR // FLAGSHIP PRODUCT LABS
             </span>
-            <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
+            <h2 className="font-space text-[38px] sm:text-4xl lg:text-6xl text-white font-medium lg:font-light tracking-tight leading-[0.98] lg:leading-tight mb-3">
               Nexus-7 <span className="text-emerald-400 font-normal">Station</span>
             </h2>
-            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl">
+            <p className="font-sans text-[15px] sm:text-base lg:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl">
               An orbital research station dedicated to solving complex human friction. Here lies the synthesis of user empathy, technical architecture, and ruthless trade-off analysis.
             </p>
             <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-emerald-300 font-mono text-[11px] sm:text-xs">
@@ -195,17 +202,17 @@ export default function HUD() {
 
         {/* 7. SCENE 07: COMMAND DOME // DYSON SPHERE MEGASTRUCTURE (Page 14.2) */}
         <Section offset={14.2} style={{ alignItems: "center", textAlign: "center" }}>
-          <div className="w-full select-none bg-slate-950/80 backdrop-blur-2xl border border-white/15 p-5 sm:p-10 md:p-14 rounded-3xl shadow-2xl text-left md:text-center flex flex-col items-start md:items-center">
+          <div className="w-full select-none bg-slate-950/80 backdrop-blur-2xl border border-white/15 p-5 sm:p-10 md:p-14 rounded-3xl shadow-2xl text-left lg:text-center flex flex-col items-start lg:items-center">
             <span className="font-mono text-xs tracking-[0.15em] text-amber-400 uppercase block mb-2 sm:mb-4">
               MISSION CONTROL // STRATEGIC LIAISON
             </span>
-            <h2 className="font-space text-[38px] sm:text-4xl md:text-7xl font-medium md:font-light text-white tracking-tight leading-[0.98] md:leading-tight mb-3 sm:mb-6">
+            <h2 className="font-space text-[38px] sm:text-4xl lg:text-7xl font-medium lg:font-light text-white tracking-tight leading-[0.98] lg:leading-tight mb-3 sm:mb-6">
               Command Dome
             </h2>
             <div className="py-2 sm:py-4 border-y border-white/10 my-3 sm:my-6 font-mono text-sm sm:text-lg md:text-2xl text-emerald-400 tracking-widest font-semibold w-full">
               ... CORRECTION. MISSION STILL ACTIVE.
             </div>
-            <p className="font-sans text-[15px] sm:text-base md:text-xl text-slate-300 font-light leading-relaxed max-w-[70vw] sm:max-w-xl md:mx-auto mb-4 sm:mb-6">
+            <p className="font-sans text-[15px] sm:text-base lg:text-xl text-slate-300 font-light leading-relaxed max-w-[70vw] sm:max-w-xl md:mx-auto mb-4 sm:mb-6">
               I&apos;m currently exploring Product Management opportunities where I can contribute through user research, analytics, structured product thinking, and AI-powered product development. I&apos;d love to connect.
             </p>
             <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-slate-400 font-mono text-[11px] sm:text-xs">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Line, Html, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
@@ -9,6 +9,7 @@ import { CURIOSITY_STORIES, CuriosityStory } from "../../data/missionData";
 import { audioEngine } from "../../lib/audioEngine";
 import { triggerHaptic } from "../../lib/haptics";
 import { useMissionStore } from "../../store/missionStore";
+import { isMobile } from "../../lib/qualityTier";
 
 interface PlanetVeridianProps {
   onSelectStory?: (story: CuriosityStory) => void;
@@ -58,13 +59,22 @@ function StoryBeacon({
   const [clicked, setClicked] = useState(false);
   const setHoveringInteractive = useMissionStore(state => state.setHoveringInteractive);
   const targetScale = useMemo(() => new THREE.Vector3(1, 1, 1), []);
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    setMobile(isMobile);
+  }, []);
 
   // Convert absolute world coordinates to planet-relative coordinates (Planet group is at [0, -2, -60])
-  const relPos = useMemo(() => [
-    story.coordinates[0] - 0,
-    story.coordinates[1] - (-2),
-    story.coordinates[2] - (-60)
-  ] as [number, number, number], [story.coordinates]);
+  // Scale beacon orbital path closer to the planet body on mobile viewports
+  const relPos = useMemo(() => {
+    const scaleFactor = mobile ? 0.72 : 1.0;
+    return [
+      (story.coordinates[0] - 0) * scaleFactor,
+      (story.coordinates[1] - (-2)) * scaleFactor,
+      (story.coordinates[2] - (-60)) * scaleFactor
+    ] as [number, number, number];
+  }, [story.coordinates, mobile]);
 
   useFrame((state, delta) => {
     if (meshRef.current) {

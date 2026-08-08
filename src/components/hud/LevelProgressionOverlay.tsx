@@ -79,7 +79,7 @@ export default function LevelProgressionOverlay() {
     <>
       {/* 1. Global HUD Progression Tracker */}
       <div 
-        className="relative md:fixed md:top-24 md:right-6 z-40 pointer-events-none flex flex-col items-end gap-1 select-none"
+        className="absolute top-20 left-4 right-4 z-40 pointer-events-none flex flex-col items-start gap-1 select-none md:fixed md:top-24 md:right-6 md:left-auto md:items-end"
         style={{
           paddingTop: "env(safe-area-inset-top, 0px)",
           paddingRight: "env(safe-area-inset-right, 0px)",
