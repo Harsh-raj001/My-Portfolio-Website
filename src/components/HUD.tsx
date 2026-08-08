@@ -49,6 +49,7 @@ const Section = ({
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
+            zIndex: 10,
           };
         case "center":
           return {
@@ -61,6 +62,7 @@ const Section = ({
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            zIndex: 10,
           };
         case "left":
         default:
@@ -74,21 +76,24 @@ const Section = ({
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
+            zIndex: 10,
           };
       }
     } else {
       switch (position) {
         case "right":
+          // Synthesis-V on desktop: centered horizontally and vertically to avoid ring overlap
           return {
             position: "absolute",
             top: "50%",
-            left: "58vw",
-            transform: "translateY(-50%)",
-            width: "38vw",
-            textAlign: "left",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "45vw",
+            textAlign: "center",
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
+            alignItems: "center",
+            zIndex: 30,
           };
         case "center":
           return {
@@ -101,6 +106,7 @@ const Section = ({
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            zIndex: 10,
           };
         case "left":
         default:
@@ -114,6 +120,7 @@ const Section = ({
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
+            zIndex: 10,
           };
       }
     }
@@ -210,14 +217,14 @@ export default function HUD() {
 
         {/* 4. SCENE 04: SYNTHESIS-V // CYBERNETIC LEARNING BELT (Page 7 - 9.5) */}
         <Section offset={7} position="right">
-          <div className="w-full select-none text-left">
+          <div className="w-full select-none text-left md:text-center flex flex-col items-start md:items-center">
             <span className="font-mono text-xs tracking-[0.15em] text-cyan-400 uppercase block mb-2">
               CHAPTER THREE // KNOWLEDGE MONOLITHS
             </span>
             <h2 className="font-space text-[38px] sm:text-4xl md:text-6xl text-white font-medium md:font-light tracking-tight leading-[0.98] md:leading-tight mb-3">
               Synthesis-<span className="text-cyan-400 font-normal">V</span>
             </h2>
-            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl">
+            <p className="font-sans text-[15px] sm:text-base md:text-lg text-slate-300 font-light leading-relaxed mb-4 sm:mb-6 max-w-[70vw] sm:max-w-xl md:mx-auto">
               Transforming raw knowledge into executive analytical frameworks. From machine learning and product analytics to unit economics and statistical rigor at scale.
             </p>
             <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-cyan-300 font-mono text-[11px] sm:text-xs">
