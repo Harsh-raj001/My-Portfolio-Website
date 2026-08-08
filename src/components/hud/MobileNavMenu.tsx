@@ -38,7 +38,7 @@ export default function MobileNavMenu() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute top-16 right-0 w-64 bg-slate-900/95 backdrop-blur-xl border border-white/15 rounded-2xl p-4 shadow-2xl flex flex-col gap-2 pointer-events-auto"
+            className="absolute top-16 left-0 right-auto w-64 max-w-[calc(100vw-32px)] bg-slate-900/95 backdrop-blur-xl border border-white/15 rounded-2xl p-4 shadow-2xl flex flex-col gap-2 pointer-events-auto overflow-y-auto max-h-[80vh]"
           >
             <div className="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2 px-2">
               Navigation Data Link

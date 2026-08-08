@@ -20,7 +20,7 @@ export const RESOURCES = {
     portfolio: "https://gravel-citrine-12a.notion.site/Product-Management-Portfolio-Harsh-Raj-386142fbea2d8019af20d18aa7aa5ea6?source=copy_link",
     linkedin: "https://www.linkedin.com/in/harsh-raj-in/",
     github: "https://github.com/Harsh-raj001",
-    resume: "https://drive.google.com/file/d/1XmrA5FU_U1tIO3o4sEEKQWEyhn-kYDqq/view?usp=drive_link",
+    resume: "https://drive.google.com/file/d/1ZHA3Ed8lhEAPdcaQunJZsLa6NOfv1vRc/view?usp=drive_link",
     website: "https://gravel-citrine-12a.notion.site/HARSH-RAJ-PRODUCT-MANAGER-e34142fbea2d830b80ab0176010b3ce6?source=copy_link"
   },
 

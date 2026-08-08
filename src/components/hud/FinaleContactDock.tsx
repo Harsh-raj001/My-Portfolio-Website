@@ -84,7 +84,7 @@ export default function CommandDashboard() {
               rel="noopener noreferrer"
               aria-label="View Resume"
               onClick={() => audioEngine.playHoverPing()}
-              className="flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group pointer-events-auto"
+              className="hidden md:flex flex-col items-center justify-center p-4 border border-cyan-500/20 rounded-xl bg-slate-900/50 hover:bg-cyan-900/30 hover:border-cyan-400/50 transition-all group pointer-events-auto"
             >
               <FileText className="text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
               <span className="text-xs font-medium text-slate-300 group-hover:text-white">Resume</span>

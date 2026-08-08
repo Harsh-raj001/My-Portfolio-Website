@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { audioEngine } from "../../lib/audioEngine";
 import { FINALE_LINKS } from "../../data/missionData";
 import { motion, AnimatePresence } from "framer-motion";
-import { isMobile } from "../../lib/qualityTier";
 import { triggerHaptic } from "../../lib/haptics";
 
 interface ExecFastTrackHUDProps {
@@ -25,11 +24,6 @@ export default function ExecFastTrackHUD({
   onOpenCommandPalette
 }: ExecFastTrackHUDProps) {
   const [showToast, setShowToast] = useState(false);
-  const [isMobileDevice, setIsMobileDevice] = useState(false);
-
-  useEffect(() => {
-    setIsMobileDevice(isMobile);
-  }, []);
 
   useEffect(() => {
     if (isExecutiveMode) {
@@ -84,7 +78,7 @@ export default function ExecFastTrackHUD({
 
       <nav 
         aria-label="Recruiter Fast-Track Bypass Navigation"
-        className="relative md:fixed md:top-6 md:right-6 z-50 flex flex-wrap items-center justify-end gap-1.5 pointer-events-none font-mono text-[10px] sm:text-xs select-none max-w-full px-2 sm:px-0 w-auto"
+        className="relative md:fixed md:top-6 md:right-6 z-50 flex flex-nowrap items-center justify-end gap-1 sm:gap-1.5 pointer-events-none font-mono text-[9px] min-[360px]:text-[10px] sm:text-xs select-none max-w-full px-1 sm:px-0 w-auto"
         style={{ 
           transform: "translate3d(0, 0, 0)", 
           willChange: "transform",
@@ -106,63 +100,63 @@ export default function ExecFastTrackHUD({
         </button>
 
         {/* 🚀 DUAL OPERATING SYSTEM SWITCHER (MISSION MODE vs EXEC MODE) */}
-        {isMobileDevice ? (
+        {/* Mobile Switcher Button: visible below md screens */}
+        <button
+          onClick={() => {
+            if (isExecutiveMode) {
+              audioEngine.playKlaxon();
+            } else {
+              audioEngine.playCrystallinePing(880);
+            }
+            triggerHaptic("selection");
+            onToggleExecutiveMode?.();
+          }}
+          className={`flex md:hidden items-center gap-1 px-2 py-1.5 rounded-full border backdrop-blur-md transition-all text-[9px] min-[360px]:text-[10px] font-extrabold tracking-wider cursor-pointer pointer-events-auto shrink-0 ${
+            isExecutiveMode 
+              ? "bg-amber-500/20 text-amber-300 border-amber-500/40" 
+              : "bg-cyan-500/20 text-cyan-300 border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.25)] animate-pulse"
+          }`}
+          aria-label={isExecutiveMode ? "Switch to Explorer Mode" : "Switch to Executive Fast Track"}
+        >
+          <span>{isExecutiveMode ? "🛸 EXPLORER" : "⚡ EXEC MODE"}</span>
+        </button>
+
+        {/* Desktop Switcher Card: visible on md screens and above */}
+        <div className="hidden md:flex flex-col bg-slate-950/90 backdrop-blur-xl p-3 rounded-xl border border-slate-800 shadow-[0_0_25px_rgba(245,158,11,0.15)] min-w-[180px] pointer-events-auto">
+          <span className="text-xs font-extrabold uppercase text-slate-500 tracking-widest mb-2 border-b border-slate-800 pb-1">MISSION MODE</span>
+          
           <button
             onClick={() => {
               if (isExecutiveMode) {
                 audioEngine.playKlaxon();
-              } else {
-                audioEngine.playCrystallinePing(880);
+                triggerHaptic("selection");
+                onToggleExecutiveMode?.();
               }
-              triggerHaptic("selection");
-              onToggleExecutiveMode?.();
             }}
-            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full border backdrop-blur-md transition-all text-[10px] font-extrabold tracking-wider cursor-pointer pointer-events-auto ${
-              isExecutiveMode 
-                ? "bg-amber-500/20 text-amber-300 border-amber-500/40" 
-                : "bg-slate-950/80 text-cyan-400 border-cyan-500/30 shadow-[0_0_15px_rgba(0,240,255,0.15)]"
+            className={`flex items-center gap-2 text-xs font-bold tracking-wider py-1.5 transition-colors text-left w-full hover:text-cyan-400 ${
+              !isExecutiveMode ? "text-cyan-400" : "text-slate-400"
             }`}
-            aria-label={isExecutiveMode ? "Switch to Explorer Mode" : "Switch to Executive Fast Track"}
           >
-            <span>{isExecutiveMode ? "🛸 EXPLORER" : "⚡ EXEC MODE"}</span>
+            <span className="text-sm font-mono">{!isExecutiveMode ? "●" : "○"}</span>
+            <span>Explorer</span>
           </button>
-        ) : (
-          <div className="flex flex-col bg-slate-950/90 backdrop-blur-xl p-3 rounded-xl border border-slate-800 shadow-[0_0_25px_rgba(245,158,11,0.15)] min-w-[180px] pointer-events-auto">
-            <span className="text-xs font-extrabold uppercase text-slate-500 tracking-widest mb-2 border-b border-slate-800 pb-1">MISSION MODE</span>
-            
-            <button
-              onClick={() => {
-                if (isExecutiveMode) {
-                  audioEngine.playKlaxon();
-                  triggerHaptic("selection");
-                  onToggleExecutiveMode?.();
-                }
-              }}
-              className={`flex items-center gap-2 text-xs font-bold tracking-wider py-1.5 transition-colors text-left w-full hover:text-cyan-400 ${
-                !isExecutiveMode ? "text-cyan-400" : "text-slate-400"
-              }`}
-            >
-              <span className="text-sm font-mono">{!isExecutiveMode ? "●" : "○"}</span>
-              <span>Explorer</span>
-            </button>
 
-            <button
-              onClick={() => {
-                if (!isExecutiveMode) {
-                  audioEngine.playCrystallinePing(880);
-                  triggerHaptic("selection");
-                  onToggleExecutiveMode?.();
-                }
-              }}
-              className={`flex items-center gap-2 text-xs font-bold tracking-wider py-1.5 transition-colors text-left w-full hover:text-amber-400 ${
-                isExecutiveMode ? "text-amber-400 animate-pulse" : "text-slate-400"
-              }`}
-            >
-              <span className="text-sm font-mono">{isExecutiveMode ? "●" : "○"}</span>
-              <span>Executive Fast Track</span>
-            </button>
-          </div>
-        )}
+          <button
+            onClick={() => {
+              if (!isExecutiveMode) {
+                audioEngine.playCrystallinePing(880);
+                triggerHaptic("selection");
+                onToggleExecutiveMode?.();
+              }
+            }}
+            className={`flex items-center gap-2 text-xs font-bold tracking-wider py-1.5 transition-colors text-left w-full hover:text-amber-400 ${
+              isExecutiveMode ? "text-amber-400 animate-pulse" : "text-slate-400"
+            }`}
+          >
+            <span className="text-sm font-mono">{isExecutiveMode ? "●" : "○"}</span>
+            <span>Executive Fast Track</span>
+          </button>
+        </div>
 
         {/* 1-Click Sector Teleportation Pills (Only displayed in Mission Mode) */}
         {!isExecutiveMode && (
@@ -189,11 +183,11 @@ export default function ExecFastTrackHUD({
             audioEngine.playHoverPing();
             onToggleAudio?.();
           }}
-          className="flex items-center gap-1.5 bg-slate-950/80 hover:bg-slate-900/90 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/15 text-slate-300 hover:text-white transition-all shadow-lg cursor-pointer group pointer-events-auto"
+          className="flex items-center gap-1 bg-slate-950/80 hover:bg-slate-900/90 backdrop-blur-md px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-full border border-white/15 text-slate-300 hover:text-white transition-all shadow-lg cursor-pointer group pointer-events-auto shrink-0"
           title="Toggle Web Audio API Atmospheric Synthesizer"
         >
-          <span className={`w-1.5 h-1.5 rounded-full transition-colors ${isAudioMuted ? "bg-rose-500" : "bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"}`} />
-          <span className="tracking-widest text-[10px]">
+          <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full transition-colors ${isAudioMuted ? "bg-rose-500" : "bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"}`} />
+          <span className="tracking-widest text-[9px] min-[360px]:text-[10px]">
             [AUDIO: <strong className={isAudioMuted ? "text-rose-400 font-semibold" : "text-emerald-400 font-semibold"}>{isAudioMuted ? "OFF" : "ON"}</strong>]
           </span>
         </button>
@@ -204,10 +198,10 @@ export default function ExecFastTrackHUD({
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => audioEngine.playHoverPing()}
-          className="flex items-center gap-1 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/40 hover:to-blue-500/40 text-cyan-300 hover:text-white font-semibold text-[10px] tracking-widest px-3 py-1.5 rounded-full backdrop-blur-md border border-cyan-400/30 hover:border-cyan-400 transition-all shadow-[0_0_15px_rgba(0,240,255,0.2)] cursor-pointer pointer-events-auto"
+          className="flex items-center gap-0.5 bg-slate-950/85 hover:bg-slate-900/90 text-slate-400 hover:text-white font-medium text-[9px] min-[360px]:text-[10px] tracking-widest px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-full backdrop-blur-md border border-white/10 hover:border-white/30 transition-all shadow-lg cursor-pointer pointer-events-auto shrink-0"
         >
-          <span>RESUME.PDF</span>
-          <span className="text-xs">↗</span>
+          <span>RESUME</span>
+          <span className="text-[10px] sm:text-xs">↗</span>
         </a>
       </nav>
     </>
